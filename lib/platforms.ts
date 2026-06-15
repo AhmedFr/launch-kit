@@ -11,9 +11,9 @@ export type Platform = {
 
 export const PLATFORMS: Platform[] = [
   { id: 'product-hunt', name: 'Product Hunt', blurb: 'The classic maker launch', available: true },
-  { id: 'appsumo', name: 'AppSumo', blurb: 'Lifetime-deal marketplace', available: false },
-  { id: 'hacker-news', name: 'Hacker News', blurb: 'Show HN', available: false },
-  { id: 'reddit', name: 'Reddit', blurb: 'Subreddit launch post', available: false },
+  { id: 'appsumo', name: 'AppSumo', blurb: 'Lifetime-deal marketplace', available: true },
+  { id: 'hacker-news', name: 'Hacker News', blurb: 'Show HN', available: true },
+  { id: 'reddit', name: 'Reddit', blurb: 'Subreddit launch post', available: true },
 ]
 
 export const ACTIVE_PLATFORM: Platform = PLATFORMS[0]
