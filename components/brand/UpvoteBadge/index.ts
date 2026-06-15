@@ -1,0 +1,1 @@
+export { UpvoteBadge } from './UpvoteBadge'
