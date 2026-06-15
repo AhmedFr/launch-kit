@@ -19,4 +19,8 @@ describe('wizardReducer', () => {
     const mid = wizardReducer(initialState, { type: 'ANALYZED', context: ctx })
     expect(wizardReducer(mid, { type: 'RESET' }).step).toBe('folder')
   })
+  it('HYDRATE replaces state wholesale', () => {
+    const saved = { ...initialState, step: 'kit' as const, context: ctx }
+    expect(wizardReducer(initialState, { type: 'HYDRATE', state: saved })).toEqual(saved)
+  })
 })

@@ -18,6 +18,7 @@ export type WizardAction =
   | { type: 'GENERATED'; kit: LaunchKit }
   | { type: 'PATCH_KIT'; patch: Partial<LaunchKit> }
   | { type: 'GO'; step: WizardStep }
+  | { type: 'HYDRATE'; state: WizardState }
   | { type: 'RESET' }
 
 export const initialState: WizardState = {
@@ -33,6 +34,7 @@ export function wizardReducer(state: WizardState, action: WizardAction): WizardS
     case 'GENERATED': return { ...state, kit: action.kit, step: 'kit' }
     case 'PATCH_KIT': return state.kit ? { ...state, kit: { ...state.kit, ...action.patch } } : state
     case 'GO': return { ...state, step: action.step }
+    case 'HYDRATE': return action.state
     case 'RESET': return initialState
     default: return state
   }
