@@ -97,6 +97,7 @@ export default function Home() {
       {state.step === 'kit' && state.kit && (
         <PostKit
           kit={state.kit}
+          productName={state.context?.name ?? state.kit.copy.nameSuggestions[0] ?? 'Your product'}
           onRegenerateSection={(s) => generate(s)}
           regeneratingSection={regenSection}
           onExportMarkdown={exportMarkdown}
