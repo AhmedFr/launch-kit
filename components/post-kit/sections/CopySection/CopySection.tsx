@@ -1,6 +1,6 @@
 import { SectionCard } from '@/components/common/SectionCard'
 import { CopyButton } from '@/components/common/CopyButton'
-import { Button } from '@/components/ui/button'
+import { RegenerateButton } from '@/components/common/RegenerateButton'
 import { Badge } from '@/components/ui/badge'
 import type { CopySectionProps } from './CopySection.types'
 
@@ -9,7 +9,7 @@ export function CopySection({ kit, onRegenerate, regenerating }: CopySectionProp
   return (
     <SectionCard
       title="Name & copy"
-      action={<Button variant="ghost" size="sm" onClick={onRegenerate} disabled={regenerating}>Regenerate</Button>}
+      action={<RegenerateButton onClick={onRegenerate} regenerating={regenerating} />}
     >
       <div className="space-y-1">
         <div className="text-xs uppercase text-muted-foreground">Tagline ({copy.tagline.length}/60)</div>

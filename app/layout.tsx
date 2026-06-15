@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Bricolage_Grotesque } from "next/font/google";
 import "./globals.css";
 import { WizardProvider } from "@/lib/wizard/WizardProvider";
 import { AppHeader } from "@/components/brand/AppHeader";
@@ -15,9 +15,16 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const bricolage = Bricolage_Grotesque({
+  variable: "--font-bricolage",
+  subsets: ["latin"],
+  weight: ["500", "600", "700", "800"],
+});
+
 export const metadata: Metadata = {
-  title: "Launch Kit — Product Hunt post generator",
-  description: "Turn a project folder into a complete Product Hunt launch kit.",
+  title: "Launch Kit — your launch, ready to ship",
+  description:
+    "Turn a project folder into a complete launch kit: copy, gallery, video storyboard, and launch ops.",
 };
 
 export default function RootLayout({
@@ -28,7 +35,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${bricolage.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         <WizardProvider>

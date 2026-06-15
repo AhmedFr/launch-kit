@@ -1,6 +1,6 @@
 import { SectionCard } from '@/components/common/SectionCard'
 import { CopyButton } from '@/components/common/CopyButton'
-import { Button } from '@/components/ui/button'
+import { RegenerateButton } from '@/components/common/RegenerateButton'
 import type { LaunchOpsSectionProps } from './LaunchOpsSection.types'
 
 export function LaunchOpsSection({ kit, onRegenerate, regenerating }: LaunchOpsSectionProps) {
@@ -8,9 +8,12 @@ export function LaunchOpsSection({ kit, onRegenerate, regenerating }: LaunchOpsS
   return (
     <SectionCard
       title="Launch ops"
-      action={<Button variant="ghost" size="sm" onClick={onRegenerate} disabled={regenerating}>Regenerate</Button>}
+      action={<RegenerateButton onClick={onRegenerate} regenerating={regenerating} />}
     >
-      <p className="font-medium">Best time: {launch.recommendedDay}, {launch.recommendedTimePT}</p>
+      <div className="flex items-center gap-2 rounded-xl bg-primary/10 px-3 py-2">
+        <span aria-hidden>📅</span>
+        <span><span className="font-medium">Best time:</span> {launch.recommendedDay}, {launch.recommendedTimePT}</span>
+      </div>
       <div>
         <div className="text-xs uppercase text-muted-foreground">Pre-launch</div>
         <ul className="list-disc pl-5">{launch.prelaunchChecklist.map((c) => <li key={c}>{c}</li>)}</ul>

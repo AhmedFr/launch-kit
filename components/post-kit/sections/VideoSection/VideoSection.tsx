@@ -1,5 +1,5 @@
 import { SectionCard } from '@/components/common/SectionCard'
-import { Button } from '@/components/ui/button'
+import { RegenerateButton } from '@/components/common/RegenerateButton'
 import type { VideoSectionProps } from './VideoSection.types'
 
 export function VideoSection({ kit, onRegenerate, regenerating }: VideoSectionProps) {
@@ -7,15 +7,17 @@ export function VideoSection({ kit, onRegenerate, regenerating }: VideoSectionPr
   return (
     <SectionCard
       title="Demo video storyboard"
-      action={<Button variant="ghost" size="sm" onClick={onRegenerate} disabled={regenerating}>Regenerate</Button>}
+      action={<RegenerateButton onClick={onRegenerate} regenerating={regenerating} />}
     >
       <p><span className="font-medium">Hook:</span> {video.hook}</p>
       <p className="text-muted-foreground">Length ~{video.lengthSec}s · CTA: {video.cta}</p>
-      <ol className="space-y-2">
+      <ol className="relative space-y-3 border-l border-border pl-5">
         {video.scenes.map((s, i) => (
-          <li key={i} className="rounded-md border p-2">
-            <span className="font-mono text-xs text-primary">{s.timeRange}</span> — {s.visual}
-            <div className="text-muted-foreground">On-screen: {s.onScreenText}</div>
+          <li key={i} className="relative">
+            <span className="absolute -left-[1.4rem] top-1 size-2 rounded-full bg-primary ring-4 ring-background" />
+            <div className="font-mono text-xs font-medium text-primary">{s.timeRange}</div>
+            <div>{s.visual}</div>
+            <div className="text-muted-foreground"><span className="text-foreground/70">On-screen:</span> {s.onScreenText}</div>
           </li>
         ))}
       </ol>

@@ -1,6 +1,6 @@
 import { SectionCard } from '@/components/common/SectionCard'
 import { CopyButton } from '@/components/common/CopyButton'
-import { Button } from '@/components/ui/button'
+import { RegenerateButton } from '@/components/common/RegenerateButton'
 import { Badge } from '@/components/ui/badge'
 import type { TopicsCommentSectionProps } from './TopicsCommentSection.types'
 
@@ -8,7 +8,7 @@ export function TopicsCommentSection({ kit, onRegenerate, regenerating }: Topics
   return (
     <SectionCard
       title="Topics & first comment"
-      action={<Button variant="ghost" size="sm" onClick={onRegenerate} disabled={regenerating}>Regenerate</Button>}
+      action={<RegenerateButton onClick={onRegenerate} regenerating={regenerating} />}
     >
       <div className="flex flex-wrap gap-1">
         {kit.topics.map((t) => <Badge key={t}>{t}</Badge>)}
