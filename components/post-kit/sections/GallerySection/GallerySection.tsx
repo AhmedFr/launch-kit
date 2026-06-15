@@ -7,6 +7,7 @@ export function GallerySection({ kit, onRegenerate, regenerating }: GallerySecti
     <SectionCard
       title="Gallery shot list"
       action={<RegenerateButton onClick={onRegenerate} regenerating={regenerating} />}
+      loading={regenerating}
     >
       <ol className="space-y-3">
         {kit.gallery.shots.map((s, i) => (

@@ -9,6 +9,7 @@ export function TopicsCommentSection({ kit, onRegenerate, regenerating }: Topics
     <SectionCard
       title="Topics & first comment"
       action={<RegenerateButton onClick={onRegenerate} regenerating={regenerating} />}
+      loading={regenerating}
     >
       <div className="flex flex-wrap gap-1">
         {kit.topics.map((t) => <Badge key={t}>{t}</Badge>)}

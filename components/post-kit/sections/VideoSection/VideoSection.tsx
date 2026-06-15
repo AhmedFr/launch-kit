@@ -8,6 +8,7 @@ export function VideoSection({ kit, onRegenerate, regenerating }: VideoSectionPr
     <SectionCard
       title="Demo video storyboard"
       action={<RegenerateButton onClick={onRegenerate} regenerating={regenerating} />}
+      loading={regenerating}
     >
       <p><span className="font-medium">Hook:</span> {video.hook}</p>
       <p className="text-muted-foreground">Length ~{video.lengthSec}s · CTA: {video.cta}</p>

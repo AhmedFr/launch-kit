@@ -10,6 +10,7 @@ export function CopySection({ kit, onRegenerate, regenerating }: CopySectionProp
     <SectionCard
       title="Name & copy"
       action={<RegenerateButton onClick={onRegenerate} regenerating={regenerating} />}
+      loading={regenerating}
     >
       <div className="space-y-1">
         <div className="text-xs uppercase text-muted-foreground">Tagline ({copy.tagline.length}/60)</div>

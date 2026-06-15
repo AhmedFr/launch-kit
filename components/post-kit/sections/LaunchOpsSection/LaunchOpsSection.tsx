@@ -9,6 +9,7 @@ export function LaunchOpsSection({ kit, onRegenerate, regenerating }: LaunchOpsS
     <SectionCard
       title="Launch ops"
       action={<RegenerateButton onClick={onRegenerate} regenerating={regenerating} />}
+      loading={regenerating}
     >
       <div className="flex items-center gap-2 rounded-xl bg-primary/10 px-3 py-2">
         <span aria-hidden>📅</span>

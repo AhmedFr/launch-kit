@@ -6,6 +6,7 @@ import { WizardStepper } from '@/components/wizard/WizardStepper'
 import { FolderSelect } from '@/components/folder-select/FolderSelect'
 import { ContextReview } from '@/components/context-review/ContextReview'
 import { PostKit } from '@/components/post-kit/PostKit'
+import { GeneratingKit } from '@/components/generating/GeneratingKit'
 import { kitToMarkdown } from '@/lib/export/to-markdown'
 import type { GenerateInput, SectionKey } from '@/lib/types'
 import type { WizardStep } from '@/lib/wizard/wizard-reducer'
@@ -65,11 +66,13 @@ export default function Home() {
 
   return (
     <div className="space-y-6">
-      <WizardStepper
-        current={state.step}
-        reachable={reachable}
-        onStep={(step) => dispatch({ type: 'GO', step })}
-      />
+      {!generating && (
+        <WizardStepper
+          current={state.step}
+          reachable={reachable}
+          onStep={(step) => dispatch({ type: 'GO', step })}
+        />
+      )}
       {state.step === 'folder' && (
         <FolderSelect
           path={state.path}
@@ -78,14 +81,18 @@ export default function Home() {
         />
       )}
       {state.step === 'review' && state.context && (
-        <ContextReview
-          context={state.context}
-          refinements={state.refinements}
-          onContextChange={(context) => dispatch({ type: 'EDIT_CONTEXT', context })}
-          onRefinementsChange={(refinements) => dispatch({ type: 'EDIT_REFINEMENTS', refinements })}
-          onGenerate={() => generate()}
-          generating={generating}
-        />
+        generating ? (
+          <GeneratingKit productName={state.context.name} />
+        ) : (
+          <ContextReview
+            context={state.context}
+            refinements={state.refinements}
+            onContextChange={(context) => dispatch({ type: 'EDIT_CONTEXT', context })}
+            onRefinementsChange={(refinements) => dispatch({ type: 'EDIT_REFINEMENTS', refinements })}
+            onGenerate={() => generate()}
+            generating={generating}
+          />
+        )
       )}
       {state.step === 'kit' && state.kit && (
         <PostKit
