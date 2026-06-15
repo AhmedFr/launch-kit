@@ -8,6 +8,7 @@ import { ContextReview } from '@/components/context-review/ContextReview'
 import { PostKit } from '@/components/post-kit/PostKit'
 import { kitToMarkdown } from '@/lib/export/to-markdown'
 import type { GenerateInput, SectionKey } from '@/lib/types'
+import type { WizardStep } from '@/lib/wizard/wizard-reducer'
 
 export default function Home() {
   const { state, dispatch } = useWizard()
@@ -58,9 +59,17 @@ export default function Home() {
     toast.success('Full kit copied')
   }
 
+  const reachable: WizardStep[] = ['folder']
+  if (state.context) reachable.push('review')
+  if (state.kit) reachable.push('kit')
+
   return (
     <div className="space-y-6">
-      <WizardStepper current={state.step} />
+      <WizardStepper
+        current={state.step}
+        reachable={reachable}
+        onStep={(step) => dispatch({ type: 'GO', step })}
+      />
       {state.step === 'folder' && (
         <FolderSelect
           path={state.path}

@@ -28,7 +28,7 @@ export const initialState: WizardState = {
 export function wizardReducer(state: WizardState, action: WizardAction): WizardState {
   switch (action.type) {
     case 'SET_PATH': return { ...state, path: action.path }
-    case 'ANALYZED': return { ...state, context: action.context, step: 'review' }
+    case 'ANALYZED': return { ...state, context: action.context, kit: null, step: 'review' }
     case 'EDIT_CONTEXT': return { ...state, context: action.context }
     case 'EDIT_REFINEMENTS': return { ...state, refinements: action.refinements }
     case 'GENERATED': return { ...state, kit: action.kit, step: 'kit' }

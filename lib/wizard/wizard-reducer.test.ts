@@ -23,4 +23,17 @@ describe('wizardReducer', () => {
     const saved = { ...initialState, step: 'kit' as const, context: ctx }
     expect(wizardReducer(initialState, { type: 'HYDRATE', state: saved })).toEqual(saved)
   })
+  it('GO navigates without dropping context or kit', () => {
+    const atKit = { ...initialState, step: 'kit' as const, context: ctx, kit: {} as LaunchKit }
+    const back = wizardReducer(atKit, { type: 'GO', step: 'review' })
+    expect(back.step).toBe('review')
+    expect(back.context).toBe(ctx)
+    expect(back.kit).not.toBeNull()
+  })
+  it('ANALYZED clears a stale kit from a previous run', () => {
+    const withKit = { ...initialState, step: 'kit' as const, context: ctx, kit: {} as LaunchKit }
+    const re = wizardReducer(withKit, { type: 'ANALYZED', context: { ...ctx, name: 'New' } })
+    expect(re.kit).toBeNull()
+    expect(re.step).toBe('review')
+  })
 })
