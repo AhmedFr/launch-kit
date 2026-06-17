@@ -6,20 +6,10 @@ import { launchCoreSchema } from './core/core.schema'
 import { buildCorePrompt, CORE_SYSTEM_PROMPT } from './core/core.prompt'
 import { PLATFORM_GENERATORS } from './platforms/registry'
 import { extractJsonObject } from './json'
+import { DEFAULT_MODEL } from './model'
+import { describeOpenRouterError } from './openrouter-errors'
 
 const ENDPOINT = 'https://openrouter.ai/api/v1/chat/completions'
-const DEFAULT_MODEL = 'anthropic/claude-sonnet-4.6'
-
-function upstreamMessage(status: number, body: string): string {
-  try {
-    const parsed = JSON.parse(body)
-    const msg = parsed?.error?.message ?? parsed?.message
-    if (msg) return `OpenRouter ${status}: ${msg}`
-  } catch {
-    // body wasn't JSON
-  }
-  return `OpenRouter ${status}: ${body.slice(0, 200) || 'request failed'}`
-}
 
 export class OpenRouterProvider implements GenerationProvider {
   constructor(
@@ -61,7 +51,7 @@ export class OpenRouterProvider implements GenerationProvider {
     }
 
     if (!res.ok) {
-      throw new Error(upstreamMessage(res.status, await res.text().catch(() => '')))
+      throw new Error(describeOpenRouterError(res.status, await res.text().catch(() => '')))
     }
 
     const data = await res.json()

@@ -1,1 +1,6 @@
-export type RegenerateButtonProps = { onClick: () => void; regenerating: boolean }
+export type RegenerateButtonProps = {
+  onClick: () => void
+  regenerating: boolean
+  disabled?: boolean
+  title?: string
+}

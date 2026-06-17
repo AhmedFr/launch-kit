@@ -5,6 +5,8 @@ import { RegenerateButton } from '@/components/common/RegenerateButton'
 import { PLATFORMS, type PlatformId } from '@/lib/platforms'
 import { PREVIEWS } from '@/lib/preview/registry'
 import { PLATFORM_SECTIONS } from '@/components/post-kit/platforms/registry'
+import { useRuntimeConfig } from '@/lib/config/RuntimeConfigProvider'
+import { canGenerate } from '@/lib/config/runtime-config'
 import type { PostKitProps } from './PostKit.types'
 
 export function PostKit({
@@ -25,6 +27,8 @@ export function PostKit({
   const Sections = PLATFORM_SECTIONS[platform]
   const Preview = PREVIEWS[platform]
   const regenerating = regeneratingPlatform === platform
+  const config = useRuntimeConfig()
+  const canRegenerate = canGenerate(config)
 
   return (
     <div className="mx-auto max-w-5xl px-6">
@@ -76,7 +80,12 @@ export function PostKit({
           ))}
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          <RegenerateButton onClick={() => onRegeneratePlatform(platform)} regenerating={regenerating} />
+          <RegenerateButton
+            onClick={() => onRegeneratePlatform(platform)}
+            regenerating={regenerating}
+            disabled={!canRegenerate}
+            title={canRegenerate ? undefined : 'Add OPENROUTER_API_KEY to your .env to regenerate'}
+          />
           <Button variant="outline" size="sm" onClick={() => onCopyAll(platform)}>Copy all</Button>
           <Button size="sm" onClick={() => onExportMarkdown(platform)}>Export Markdown</Button>
           <Button variant="ghost" size="sm" onClick={onStartOver}>Start over</Button>

@@ -2,13 +2,14 @@
 import { Button } from '@/components/ui/button'
 import type { RegenerateButtonProps } from './RegenerateButton.types'
 
-export function RegenerateButton({ onClick, regenerating }: RegenerateButtonProps) {
+export function RegenerateButton({ onClick, regenerating, disabled = false, title }: RegenerateButtonProps) {
   return (
     <Button
       variant="ghost"
       size="sm"
       onClick={onClick}
-      disabled={regenerating}
+      disabled={regenerating || disabled}
+      title={title}
       className="-mr-2 text-muted-foreground hover:text-primary"
     >
       <span className={regenerating ? 'inline-block animate-spin' : 'inline-block'} aria-hidden>↻</span>

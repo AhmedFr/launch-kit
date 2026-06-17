@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { UpvoteBadge } from '@/components/brand/UpvoteBadge'
-import { PlatformPill } from '@/components/brand/PlatformPill'
+import { GenerationStatus } from '@/components/brand/GenerationStatus'
 
 export function AppHeader() {
   return (
@@ -13,16 +13,14 @@ export function AppHeader() {
             <span className="hidden text-xs text-muted-foreground sm:block">Your repo, launch-ready</span>
           </div>
         </Link>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3 sm:gap-4">
           <Link
             href="/runs"
             className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
           >
             Your runs
           </Link>
-          <div className="hidden sm:block">
-            <PlatformPill />
-          </div>
+          <GenerationStatus />
         </div>
       </div>
     </header>

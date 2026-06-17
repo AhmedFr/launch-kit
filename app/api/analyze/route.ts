@@ -1,14 +1,8 @@
 import { NextResponse } from 'next/server'
 import { readFolder } from '@/lib/analyze/read-folder'
+import { localFsAllowed } from '@/lib/config/runtime-config'
 
 export const runtime = 'nodejs'
-
-// This route reads the local filesystem, so it must only run on the user's own
-// machine. It's allowed during local dev (or when explicitly enabled) and denied
-// on hosted/production deploys, where it would otherwise read the server's files.
-function localFsAllowed(): boolean {
-  return process.env.NODE_ENV !== 'production' || process.env.LAUNCHKIT_ALLOW_LOCAL_FS === 'true'
-}
 
 export async function POST(req: Request) {
   if (!localFsAllowed()) {

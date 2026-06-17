@@ -4,6 +4,8 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { Badge } from '@/components/ui/badge'
+import { useRuntimeConfig } from '@/lib/config/RuntimeConfigProvider'
+import { canGenerate } from '@/lib/config/runtime-config'
 import type { ContextReviewProps } from './ContextReview.types'
 
 const REFINEMENTS = [
@@ -21,6 +23,8 @@ export function ContextReview({
   onGenerate,
   generating,
 }: ContextReviewProps) {
+  const config = useRuntimeConfig()
+  const allowed = canGenerate(config)
   const set = (patch: Partial<typeof context>) => onContextChange({ ...context, ...patch })
   const setRef = (patch: Partial<typeof refinements>) => onRefinementsChange({ ...refinements, ...patch })
 
@@ -80,9 +84,21 @@ export function ContextReview({
         </div>
       </section>
 
-      <Button onClick={onGenerate} disabled={generating} size="lg" className="reveal reveal-4 w-full">
+      <Button
+        onClick={onGenerate}
+        disabled={generating || !allowed}
+        title={allowed ? undefined : 'Add OPENROUTER_API_KEY to your .env to generate'}
+        size="lg"
+        className="reveal reveal-4 w-full"
+      >
         {generating ? 'Generating your kit…' : 'Generate Post Kit →'}
       </Button>
+      {!allowed && (
+        <p className="reveal reveal-4 text-center text-xs text-amber-700">
+          Set <code className="font-mono">OPENROUTER_API_KEY</code> in your <code className="font-mono">.env</code> to
+          generate — or switch <code className="font-mono">GENERATION_PROVIDER</code> to <code className="font-mono">mock</code> to try it key-free.
+        </p>
+      )}
     </div>
   )
 }
