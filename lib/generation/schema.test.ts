@@ -1,7 +1,20 @@
 import { describe, it, expect } from 'vitest'
-import { launchKitSchema } from './schema'
+import { launchCoreSchema } from './core/core.schema'
+import { productHuntSchema } from './platforms/product-hunt/schema'
+import { hackerNewsSchema } from './platforms/hacker-news/schema'
+import { redditSchema } from './platforms/reddit/schema'
+import { appSumoSchema } from './platforms/appsumo/schema'
 
-const validKit = {
+const core = {
+  productName: 'Acme',
+  essence: 'Acme ships faster.',
+  audience: 'developers',
+  problem: 'Shipping is slow.',
+  features: ['Fast builds'],
+  differentiators: ['Zero config'],
+}
+
+const productHunt = {
   copy: { nameSuggestions: ['Acme'], tagline: 'Do X fast', taglineAlternatives: ['Alt'], description: 'A tool.' },
   topics: ['Developer Tools'],
   firstComment: 'Hey hunters!',
@@ -10,12 +23,69 @@ const validKit = {
   launch: { recommendedDay: 'Tuesday', recommendedTimePT: '12:01 AM', prelaunchChecklist: ['a'], launchDayChecklist: ['b'], outreach: { hunter: 'hi', supporters: 'yo' } },
 }
 
-describe('launchKitSchema', () => {
-  it('accepts a valid kit', () => {
-    expect(launchKitSchema.parse(validKit)).toEqual(validKit)
+const hackerNews = {
+  title: 'Show HN: Acme – ship faster',
+  postBody: 'I built Acme to make builds fast.',
+  firstComment: 'Happy to answer technical questions.',
+  postingTips: { bestTimeET: '8:00 AM ET, weekday', avoid: ['marketing language'] },
+}
+
+const reddit = {
+  subreddits: [{ name: 'r/SideProject', why: 'makers share early projects' }],
+  title: 'I built Acme to make builds fast',
+  body: 'Here is the story and what I learned.',
+  replyEtiquette: ['Answer every comment', 'Disclose you are the maker'],
+}
+
+const appSumo = {
+  dealHeadline: 'Lifetime access to Acme',
+  pitch: 'Ship faster, pay once.',
+  whatsIncluded: ['All core features', 'Lifetime updates'],
+  bestFor: ['Indie developers'],
+  faq: [{ q: 'Is it really lifetime?', a: 'Yes.' }],
+}
+
+describe('launchCoreSchema', () => {
+  it('accepts a valid core', () => {
+    expect(launchCoreSchema.parse(core)).toEqual(core)
   })
-  it('rejects a kit missing tagline', () => {
-    const bad = { ...validKit, copy: { ...validKit.copy, tagline: undefined } }
-    expect(() => launchKitSchema.parse(bad)).toThrow()
+  it('rejects a core missing essence', () => {
+    expect(() => launchCoreSchema.parse({ ...core, essence: undefined })).toThrow()
+  })
+})
+
+describe('productHuntSchema', () => {
+  it('accepts valid Product Hunt content', () => {
+    expect(productHuntSchema.parse(productHunt)).toEqual(productHunt)
+  })
+  it('rejects content missing the tagline', () => {
+    expect(() => productHuntSchema.parse({ ...productHunt, copy: { ...productHunt.copy, tagline: undefined } })).toThrow()
+  })
+})
+
+describe('hackerNewsSchema', () => {
+  it('accepts valid Hacker News content', () => {
+    expect(hackerNewsSchema.parse(hackerNews)).toEqual(hackerNews)
+  })
+  it('rejects content missing the title', () => {
+    expect(() => hackerNewsSchema.parse({ ...hackerNews, title: undefined })).toThrow()
+  })
+})
+
+describe('redditSchema', () => {
+  it('accepts valid Reddit content', () => {
+    expect(redditSchema.parse(reddit)).toEqual(reddit)
+  })
+  it('rejects content with a malformed subreddit entry', () => {
+    expect(() => redditSchema.parse({ ...reddit, subreddits: [{ name: 'r/X' }] })).toThrow()
+  })
+})
+
+describe('appSumoSchema', () => {
+  it('accepts valid AppSumo content', () => {
+    expect(appSumoSchema.parse(appSumo)).toEqual(appSumo)
+  })
+  it('rejects content with a malformed faq entry', () => {
+    expect(() => appSumoSchema.parse({ ...appSumo, faq: [{ q: 'no answer' }] })).toThrow()
   })
 })

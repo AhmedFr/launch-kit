@@ -1,20 +1,14 @@
-import type { GenerateInput, LaunchKit, SectionKey } from '@/lib/types'
+import type { z } from 'zod'
+import type { GenerateInput, LaunchCore, PlatformContent } from '@/lib/types'
+import type { PlatformId } from '@/lib/platforms'
 import type { GenerationProvider } from './provider.types'
-import { launchKitSchema } from './schema'
-import { buildKitPrompt, SYSTEM_PROMPT } from './prompt'
+import { launchCoreSchema } from './core/core.schema'
+import { buildCorePrompt, CORE_SYSTEM_PROMPT } from './core/core.prompt'
+import { PLATFORM_GENERATORS } from './platforms/registry'
 import { extractJsonObject } from './json'
 
 const ENDPOINT = 'https://openrouter.ai/api/v1/chat/completions'
 const DEFAULT_MODEL = 'anthropic/claude-sonnet-4.6'
-
-// Which LaunchKit fields each section owns (for single-section regeneration).
-const SECTION_FIELDS: Record<SectionKey, (keyof LaunchKit)[]> = {
-  copy: ['copy'],
-  topicsComment: ['topics', 'firstComment'],
-  gallery: ['gallery'],
-  video: ['video'],
-  launch: ['launch'],
-}
 
 function upstreamMessage(status: number, body: string): string {
   try {
@@ -33,21 +27,16 @@ export class OpenRouterProvider implements GenerationProvider {
     private model = process.env.OPENROUTER_MODEL?.trim() || DEFAULT_MODEL,
   ) {}
 
-  async generateKit(input: GenerateInput): Promise<LaunchKit> {
-    return this.callModel(input)
+  async generateCore(input: GenerateInput): Promise<LaunchCore> {
+    return this.call(CORE_SYSTEM_PROMPT, buildCorePrompt(input), launchCoreSchema)
   }
 
-  async generateSection(section: SectionKey, input: GenerateInput): Promise<Partial<LaunchKit>> {
-    const kit = await this.callModel(input)
-    const patch: Partial<LaunchKit> = {}
-    for (const field of SECTION_FIELDS[section]) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      ;(patch as any)[field] = kit[field]
-    }
-    return patch
+  async generatePlatform(platform: PlatformId, core: LaunchCore, input: GenerateInput): Promise<PlatformContent> {
+    const gen = PLATFORM_GENERATORS[platform]
+    return this.call(gen.system, gen.buildPrompt(core, input), gen.schema)
   }
 
-  private async callModel(input: GenerateInput): Promise<LaunchKit> {
+  private async call<T>(system: string, user: string, schema: z.ZodType<T>): Promise<T> {
     if (!this.apiKey) throw new Error('OPENROUTER_API_KEY is not set.')
 
     let res: Response
@@ -62,8 +51,8 @@ export class OpenRouterProvider implements GenerationProvider {
           model: this.model,
           response_format: { type: 'json_object' },
           messages: [
-            { role: 'system', content: SYSTEM_PROMPT },
-            { role: 'user', content: buildKitPrompt(input) },
+            { role: 'system', content: system },
+            { role: 'user', content: user },
           ],
         }),
       })
@@ -86,7 +75,7 @@ export class OpenRouterProvider implements GenerationProvider {
       throw new Error(`Model "${this.model}" did not return valid JSON: ${err instanceof Error ? err.message : 'parse error'}`)
     }
 
-    const result = launchKitSchema.safeParse(parsed)
+    const result = schema.safeParse(parsed)
     if (!result.success) {
       const fields = result.error.issues.slice(0, 4).map((i) => i.path.join('.') || '(root)').join(', ')
       throw new Error(`Model output didn't match the expected shape (problem fields: ${fields}). Try regenerating.`)

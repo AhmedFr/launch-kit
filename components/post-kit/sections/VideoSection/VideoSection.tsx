@@ -1,15 +1,10 @@
 import { SectionCard } from '@/components/common/SectionCard'
-import { RegenerateButton } from '@/components/common/RegenerateButton'
 import type { VideoSectionProps } from './VideoSection.types'
 
-export function VideoSection({ kit, onRegenerate, regenerating }: VideoSectionProps) {
+export function VideoSection({ kit, loading = false }: VideoSectionProps) {
   const { video } = kit
   return (
-    <SectionCard
-      title="Demo video storyboard"
-      action={<RegenerateButton onClick={onRegenerate} regenerating={regenerating} />}
-      loading={regenerating}
-    >
+    <SectionCard title="Demo video storyboard" loading={loading}>
       <p><span className="font-medium">Hook:</span> {video.hook}</p>
       <p className="text-muted-foreground">Length ~{video.lengthSec}s · CTA: {video.cta}</p>
       <ol className="relative space-y-3 border-l border-border pl-5">

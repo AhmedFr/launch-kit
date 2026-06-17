@@ -3,7 +3,8 @@ import { z } from 'zod'
 const shotSchema = z.object({ title: z.string(), purpose: z.string(), caption: z.string(), layoutHint: z.string() })
 const sceneSchema = z.object({ timeRange: z.string(), visual: z.string(), onScreenText: z.string() })
 
-export const launchKitSchema = z.object({
+// Product Hunt: the richest format — copy, topics, maker comment, gallery, video, launch ops.
+export const productHuntSchema = z.object({
   copy: z.object({
     nameSuggestions: z.array(z.string()),
     tagline: z.string(),
@@ -22,5 +23,3 @@ export const launchKitSchema = z.object({
     outreach: z.object({ hunter: z.string(), supporters: z.string() }),
   }),
 })
-
-export type LaunchKitSchema = z.infer<typeof launchKitSchema>

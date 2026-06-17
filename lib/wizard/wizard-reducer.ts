@@ -1,4 +1,5 @@
-import type { ProjectContext, Refinements, LaunchKit } from '@/lib/types'
+import type { ProjectContext, Refinements, Generation, PlatformContent } from '@/lib/types'
+import type { PlatformId } from '@/lib/platforms'
 
 export type WizardStep = 'folder' | 'review' | 'kit'
 
@@ -7,7 +8,7 @@ export type WizardState = {
   path: string
   context: ProjectContext | null
   refinements: Refinements
-  kit: LaunchKit | null
+  generation: Generation | null
 }
 
 export type WizardAction =
@@ -15,24 +16,33 @@ export type WizardAction =
   | { type: 'ANALYZED'; context: ProjectContext }
   | { type: 'EDIT_CONTEXT'; context: ProjectContext }
   | { type: 'EDIT_REFINEMENTS'; refinements: Refinements }
-  | { type: 'GENERATED'; kit: LaunchKit }
-  | { type: 'PATCH_KIT'; patch: Partial<LaunchKit> }
+  | { type: 'GENERATED'; generation: Generation }
+  | { type: 'REGEN_PLATFORM'; platform: PlatformId; content: PlatformContent }
   | { type: 'GO'; step: WizardStep }
   | { type: 'HYDRATE'; state: WizardState }
   | { type: 'RESET' }
 
 export const initialState: WizardState = {
-  step: 'folder', path: '', context: null, refinements: {}, kit: null,
+  step: 'folder', path: '', context: null, refinements: {}, generation: null,
 }
 
 export function wizardReducer(state: WizardState, action: WizardAction): WizardState {
   switch (action.type) {
     case 'SET_PATH': return { ...state, path: action.path }
-    case 'ANALYZED': return { ...state, context: action.context, kit: null, step: 'review' }
+    case 'ANALYZED': return { ...state, context: action.context, generation: null, step: 'review' }
     case 'EDIT_CONTEXT': return { ...state, context: action.context }
     case 'EDIT_REFINEMENTS': return { ...state, refinements: action.refinements }
-    case 'GENERATED': return { ...state, kit: action.kit, step: 'kit' }
-    case 'PATCH_KIT': return state.kit ? { ...state, kit: { ...state.kit, ...action.patch } } : state
+    case 'GENERATED': return { ...state, generation: action.generation, step: 'kit' }
+    case 'REGEN_PLATFORM':
+      return state.generation
+        ? {
+            ...state,
+            generation: {
+              ...state.generation,
+              platforms: { ...state.generation.platforms, [action.platform]: action.content },
+            },
+          }
+        : state
     case 'GO': return { ...state, step: action.step }
     case 'HYDRATE': return action.state
     case 'RESET': return initialState

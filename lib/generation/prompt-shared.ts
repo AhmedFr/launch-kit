@@ -1,0 +1,45 @@
+import type { GenerateInput, LaunchCore } from '@/lib/types'
+
+// Raw product facts, used for the core distillation call.
+export function renderFacts(input: GenerateInput): string {
+  const { context, refinements } = input
+  return [
+    `Product name: ${context.name}`,
+    context.oneLiner && `One-liner: ${context.oneLiner}`,
+    context.summary && `Summary: ${context.summary}`,
+    context.features.length && `Features: ${context.features.join('; ')}`,
+    context.techStack.length && `Tech stack: ${context.techStack.join(', ')}`,
+    context.differentiators?.length && `Differentiators: ${context.differentiators.join('; ')}`,
+    refinements.audience && `Target audience: ${refinements.audience}`,
+    refinements.angle && `Angle / hook: ${refinements.angle}`,
+    refinements.goal && `Launch goal: ${refinements.goal}`,
+    refinements.tone && `Tone: ${refinements.tone}`,
+    context.readmeExcerpt && `README excerpt:\n${context.readmeExcerpt}`,
+  ]
+    .filter(Boolean)
+    .join('\n')
+}
+
+// The distilled core, rendered for a platform-content call.
+export function renderCore(core: LaunchCore): string {
+  return [
+    `Product: ${core.productName}`,
+    `Essence: ${core.essence}`,
+    `Audience: ${core.audience}`,
+    `Problem solved: ${core.problem}`,
+    `Features: ${core.features.join('; ')}`,
+    `Differentiators: ${core.differentiators.join('; ')}`,
+  ].join('\n')
+}
+
+// Author-chosen refinements that shape voice; appended to every platform prompt.
+export function renderRefinements(input: GenerateInput): string {
+  const { refinements } = input
+  return [
+    refinements.tone && `Preferred tone: ${refinements.tone}`,
+    refinements.goal && `Launch goal: ${refinements.goal}`,
+    refinements.angle && `Angle / hook: ${refinements.angle}`,
+  ]
+    .filter(Boolean)
+    .join('\n')
+}

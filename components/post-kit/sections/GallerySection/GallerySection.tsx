@@ -1,14 +1,9 @@
 import { SectionCard } from '@/components/common/SectionCard'
-import { RegenerateButton } from '@/components/common/RegenerateButton'
 import type { GallerySectionProps } from './GallerySection.types'
 
-export function GallerySection({ kit, onRegenerate, regenerating }: GallerySectionProps) {
+export function GallerySection({ kit, loading = false }: GallerySectionProps) {
   return (
-    <SectionCard
-      title="Gallery shot list"
-      action={<RegenerateButton onClick={onRegenerate} regenerating={regenerating} />}
-      loading={regenerating}
-    >
+    <SectionCard title="Gallery shot list" loading={loading}>
       <ol className="space-y-3">
         {kit.gallery.shots.map((s, i) => (
           <li key={i} className="flex gap-3 rounded-xl border border-border bg-muted/30 p-3">

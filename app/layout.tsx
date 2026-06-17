@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Bricolage_Grotesque } from "next/font/google";
 import "./globals.css";
-import { WizardProvider } from "@/lib/wizard/WizardProvider";
-import { AppHeader } from "@/components/brand/AppHeader";
 import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = Geist({
@@ -21,10 +19,42 @@ const bricolage = Bricolage_Grotesque({
   weight: ["500", "600", "700", "800"],
 });
 
+const DESCRIPTION =
+  "Turn any project folder into launch-ready posts tailored to each audience — Product Hunt, Hacker News, Reddit, and AppSumo. Copy, gallery shots, a video storyboard, and a launch-day plan.";
+
 export const metadata: Metadata = {
-  title: "Launch Kit — your launch, ready to ship",
-  description:
-    "Turn a project folder into a complete launch kit: copy, gallery, video storyboard, and launch ops.",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
+  title: {
+    default: "Launch Kit — your repo, launch-ready",
+    template: "%s · Launch Kit",
+  },
+  description: DESCRIPTION,
+  applicationName: "Launch Kit",
+  authors: [{ name: "Ahmed Abouelleil" }],
+  creator: "Ahmed Abouelleil",
+  keywords: [
+    "product launch",
+    "launch kit",
+    "Product Hunt",
+    "Hacker News",
+    "Show HN",
+    "Reddit",
+    "AppSumo",
+    "lifetime deal",
+    "indie hackers",
+    "makers",
+  ],
+  openGraph: {
+    type: "website",
+    siteName: "Launch Kit",
+    title: "Launch Kit — your repo, launch-ready",
+    description: DESCRIPTION,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Launch Kit — your repo, launch-ready",
+    description: DESCRIPTION,
+  },
 };
 
 export default function RootLayout({
@@ -38,10 +68,7 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} ${bricolage.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <WizardProvider>
-          <AppHeader />
-          <main className="flex-1 py-8">{children}</main>
-        </WizardProvider>
+        {children}
         <Toaster richColors position="top-center" />
       </body>
     </html>

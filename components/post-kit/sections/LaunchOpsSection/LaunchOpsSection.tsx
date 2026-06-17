@@ -1,16 +1,11 @@
 import { SectionCard } from '@/components/common/SectionCard'
 import { CopyButton } from '@/components/common/CopyButton'
-import { RegenerateButton } from '@/components/common/RegenerateButton'
 import type { LaunchOpsSectionProps } from './LaunchOpsSection.types'
 
-export function LaunchOpsSection({ kit, onRegenerate, regenerating }: LaunchOpsSectionProps) {
+export function LaunchOpsSection({ kit, loading = false }: LaunchOpsSectionProps) {
   const { launch } = kit
   return (
-    <SectionCard
-      title="Launch ops"
-      action={<RegenerateButton onClick={onRegenerate} regenerating={regenerating} />}
-      loading={regenerating}
-    >
+    <SectionCard title="Launch ops" loading={loading}>
       <div className="flex items-center gap-2 rounded-xl bg-primary/10 px-3 py-2">
         <span aria-hidden>📅</span>
         <span><span className="font-medium">Best time:</span> {launch.recommendedDay}, {launch.recommendedTimePT}</span>

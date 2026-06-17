@@ -1,9 +1,10 @@
 import type { PreviewProps } from '@/lib/preview/preview.types'
+import type { HackerNewsContent } from '@/lib/types'
 
-export function HackerNewsPreview({ kit, productName }: PreviewProps) {
+export function HackerNewsPreview({ content, productName }: PreviewProps) {
+  const hn = content as HackerNewsContent
   const handle = productName.trim().toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 15) || 'maker'
   const domain = `${(productName.trim().toLowerCase().replace(/[^a-z0-9]/g, '') || 'launchkit')}.dev`
-  const postBody = [kit.firstComment, kit.copy.description].filter(Boolean).join('\n\n')
 
   return (
     <div className="mx-auto max-w-2xl space-y-4">
@@ -27,9 +28,7 @@ export function HackerNewsPreview({ kit, productName }: PreviewProps) {
               ▲
             </span>
             <span className="text-[#000000]">
-              <span className="cursor-pointer hover:underline">
-                Show HN: {productName} – {kit.copy.tagline}
-              </span>
+              <span className="cursor-pointer hover:underline">{hn.title}</span>
               <span className="text-[#828282]"> ({domain})</span>
             </span>
           </div>
@@ -39,15 +38,23 @@ export function HackerNewsPreview({ kit, productName }: PreviewProps) {
             287 points by {handle} 3 hours ago | hide | 64 comments
           </div>
 
-          {/* Maker's first comment as the HN text post */}
+          {/* The HN text post */}
           <div className="border-t border-[#e0e0d8] pt-3">
             <div className="text-xs text-[#828282]">{handle} 2 hours ago</div>
             <p className="mt-1 whitespace-pre-wrap text-sm leading-relaxed text-[#000000]">
-              {postBody}
+              {hn.postBody}
             </p>
             <div className="mt-2 flex gap-3 text-xs text-[#828282]">
               <span aria-hidden>reply</span>
             </div>
+          </div>
+
+          {/* Maker's first comment */}
+          <div className="border-t border-[#e0e0d8] pl-4 pt-3">
+            <div className="text-xs text-[#828282]">{handle} 1 hour ago</div>
+            <p className="mt-1 whitespace-pre-wrap text-sm leading-relaxed text-[#000000]">
+              {hn.firstComment}
+            </p>
           </div>
         </div>
       </div>

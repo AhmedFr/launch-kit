@@ -1,6 +1,8 @@
 import type { PreviewProps } from '@/lib/preview/preview.types'
+import type { ProductHuntContent } from '@/lib/types'
 
-export function ProductHuntPreview({ kit, productName }: PreviewProps) {
+export function ProductHuntPreview({ content, productName }: PreviewProps) {
+  const kit = content as ProductHuntContent
   const initial = productName.trim().charAt(0).toUpperCase() || 'P'
 
   return (
