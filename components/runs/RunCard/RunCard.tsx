@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { Badge } from '@/components/ui/badge'
-import { runTitle, runStatus, runPlatforms, formatRelative, type RunStatusTone } from '@/lib/runs/run-summary'
+import { runTitle, runStatus, runPlatforms, formatRelative, shortPath, type RunStatusTone } from '@/lib/runs/run-summary'
 import type { RunCardProps } from './RunCard.types'
 
 const TONE: Record<RunStatusTone, string> = {
@@ -25,7 +25,11 @@ export function RunCard({ run, onDelete }: RunCardProps) {
             {status.label}
           </span>
         </div>
-        {run.path && <p className="mt-1 truncate font-mono text-xs text-muted-foreground">{run.path}</p>}
+        {run.path && (
+          <p title={run.path} className="mt-1 truncate font-mono text-xs text-muted-foreground">
+            {shortPath(run.path)}
+          </p>
+        )}
         <div className="mt-3 flex min-h-6 flex-wrap items-center gap-1.5">
           {platforms.length > 0 ? (
             platforms.map((p) => <Badge key={p} variant="outline" className="text-[11px]">{p}</Badge>)

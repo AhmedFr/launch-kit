@@ -10,7 +10,7 @@ export function AppHeader() {
           <UpvoteBadge count={1} />
           <div className="leading-tight">
             <span className="block font-display text-[1.15rem] font-bold tracking-tight">Launch Kit</span>
-            <span className="block text-xs text-muted-foreground">Your repo, launch-ready</span>
+            <span className="hidden text-xs text-muted-foreground sm:block">Your repo, launch-ready</span>
           </div>
         </Link>
         <div className="flex items-center gap-4">
@@ -20,7 +20,9 @@ export function AppHeader() {
           >
             Your runs
           </Link>
-          <PlatformPill />
+          <div className="hidden sm:block">
+            <PlatformPill />
+          </div>
         </div>
       </div>
     </header>

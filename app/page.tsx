@@ -3,6 +3,8 @@ import { UpvoteBadge } from '@/components/brand/UpvoteBadge'
 import { buttonVariants } from '@/components/ui/button'
 import { PLATFORMS } from '@/lib/platforms'
 
+const GITHUB = 'https://github.com/AhmedFr/launch-kit'
+
 const STEPS = [
   { n: '1', title: 'Point at a folder', body: 'Drop in a project path. We read the README and package.json locally — nothing leaves your machine.' },
   { n: '2', title: 'Review the context', body: 'Confirm what we found, then add intent: audience, angle, goal, and tone.' },
@@ -26,9 +28,14 @@ export default function Landing() {
           <UpvoteBadge count={1} />
           <span className="font-display text-lg font-bold tracking-tight">Launch Kit</span>
         </div>
-        <Link href="/runs" className={buttonVariants({ size: 'sm' })}>
-          Open your runs
-        </Link>
+        <nav className="flex items-center gap-2">
+          <a href={GITHUB} target="_blank" rel="noreferrer" className={buttonVariants({ variant: 'ghost', size: 'sm' })}>
+            <span aria-hidden>★</span> GitHub
+          </a>
+          <Link href="/runs" className={buttonVariants({ size: 'sm' })}>
+            Open your runs
+          </Link>
+        </nav>
       </header>
 
       {/* Hero */}
@@ -41,7 +48,7 @@ export default function Landing() {
         </div>
 
         <span className="reveal reveal-1 inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-xs font-medium text-muted-foreground shadow-sm">
-          <span className="size-1.5 rounded-full bg-primary" /> No backend · runs locally · your repo stays on your machine
+          <span className="size-1.5 rounded-full bg-primary" /> Runs locally · bring your own OpenRouter key · your repo never leaves your machine
         </span>
 
         <h1 className="reveal reveal-2 font-display mx-auto mt-6 max-w-3xl text-balance text-5xl font-extrabold leading-[1.02] tracking-tight sm:text-6xl">
@@ -56,10 +63,10 @@ export default function Landing() {
 
         <div className="reveal reveal-4 mt-8 flex flex-wrap items-center justify-center gap-3">
           <Link href="/runs" className={buttonVariants({ size: 'lg' })}>
-            Open your runs →
+            Open your runs <span aria-hidden>→</span>
           </Link>
-          <Link href="#how" className={buttonVariants({ variant: 'outline', size: 'lg' })}>
-            See how it works
+          <Link href="#run-locally" className={buttonVariants({ variant: 'outline', size: 'lg' })}>
+            Run it locally
           </Link>
         </div>
       </section>
@@ -106,7 +113,31 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* Closing CTA */}
+      {/* Run it locally */}
+      <section id="run-locally" className="mx-auto max-w-5xl scroll-mt-8 px-6 py-16">
+        <div className="grid items-center gap-8 md:grid-cols-2">
+          <div>
+            <h2 className="font-display text-2xl font-bold tracking-tight sm:text-3xl">Yours in under a minute</h2>
+            <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+              Launch Kit runs entirely on your machine — your code and README never leave it. Clone it,
+              add your own OpenRouter key (or use the built-in mock to try it key-free), and go.
+            </p>
+            <a href={GITHUB} target="_blank" rel="noreferrer" className={`${buttonVariants({ variant: 'outline', size: 'lg' })} mt-5`}>
+              <span aria-hidden>★</span> Star it on GitHub
+            </a>
+          </div>
+          <pre className="overflow-x-auto rounded-2xl border border-border bg-card p-5 text-[13px] leading-relaxed shadow-sm">
+            <code className="font-mono text-muted-foreground">
+              <span className="text-primary">$</span> git clone {GITHUB}.git{'\n'}
+              <span className="text-primary">$</span> cd launch-kit{'\n'}
+              <span className="text-primary">$</span> pnpm install{'\n'}
+              <span className="text-primary">$</span> pnpm dev{'  '}<span className="text-foreground/40"># open the printed URL</span>
+            </code>
+          </pre>
+        </div>
+      </section>
+
+      {/* Closing CTA + stars milestone */}
       <section className="mx-auto max-w-5xl px-6 pb-24 pt-8">
         <div className="relative overflow-hidden rounded-3xl border border-primary/20 bg-gradient-to-b from-primary/10 to-primary/[0.03] px-6 py-14 text-center">
           <div className="mx-auto mb-5 w-fit">
@@ -115,14 +146,24 @@ export default function Landing() {
           <h2 className="font-display mx-auto max-w-xl text-balance text-3xl font-extrabold tracking-tight sm:text-4xl">
             Your next launch is one folder away
           </h2>
-          <Link href="/runs" className={`${buttonVariants({ size: 'lg' })} mt-6`}>
-            Open your runs →
-          </Link>
+          {/* STARS MILESTONE — replace the reward with whatever you want to ship at 50 ⭐ */}
+          <p className="mx-auto mt-4 max-w-md text-sm text-muted-foreground">
+            <span aria-hidden>⭐</span> Hit <span className="font-semibold text-foreground">50 stars</span> and I&apos;ll
+            add <span className="font-semibold text-foreground">[your reward here]</span>.
+          </p>
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+            <Link href="/runs" className={buttonVariants({ size: 'lg' })}>
+              Open your runs <span aria-hidden>→</span>
+            </Link>
+            <a href={GITHUB} target="_blank" rel="noreferrer" className={buttonVariants({ variant: 'outline', size: 'lg' })}>
+              <span aria-hidden>★</span> Star on GitHub
+            </a>
+          </div>
         </div>
       </section>
 
       <footer className="mx-auto max-w-5xl px-6 pb-10 text-center text-xs text-muted-foreground">
-        Launch Kit — runs locally in your browser. No accounts, no servers.
+        Launch Kit — runs locally, no accounts, no servers. MIT licensed.
       </footer>
     </div>
   )
