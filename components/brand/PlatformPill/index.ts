@@ -1,1 +1,0 @@
-export { PlatformPill } from './PlatformPill'

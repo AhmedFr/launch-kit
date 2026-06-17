@@ -169,6 +169,11 @@
   }
 }
 
+@keyframes loading-slide {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(420%); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .reveal {
     animation: none;

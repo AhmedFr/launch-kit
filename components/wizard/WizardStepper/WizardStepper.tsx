@@ -6,35 +6,52 @@ const STEPS = [
   { key: 'kit', label: 'Post Kit' },
 ] as const
 
-export function WizardStepper({ current }: WizardStepperProps) {
+export function WizardStepper({ current, reachable, onStep }: WizardStepperProps) {
   const currentIndex = STEPS.findIndex((s) => s.key === current)
 
   return (
     <ol className="mx-auto flex max-w-md items-center justify-center gap-1 px-4 py-2">
       {STEPS.map((s, i) => {
         const state = i < currentIndex ? 'done' : i === currentIndex ? 'active' : 'todo'
+        const canGo = s.key !== current && reachable.includes(s.key)
+
+        const inner = (
+          <>
+            <span
+              className={[
+                'flex size-6 items-center justify-center rounded-full text-[11px] font-semibold tabular-nums transition-colors',
+                state === 'active' && 'bg-primary text-primary-foreground shadow-sm shadow-primary/30',
+                state === 'done' && 'bg-primary/15 text-primary',
+                state === 'todo' && 'bg-muted text-muted-foreground',
+              ].filter(Boolean).join(' ')}
+            >
+              {state === 'done' ? '✓' : i + 1}
+            </span>
+            <span
+              className={[
+                'text-sm transition-colors',
+                state === 'active' ? 'font-medium text-foreground' : 'text-muted-foreground',
+              ].join(' ')}
+            >
+              {s.label}
+            </span>
+          </>
+        )
+
         return (
           <li key={s.key} className="flex items-center gap-1">
-            <div className="flex items-center gap-2">
-              <span
-                className={[
-                  'flex size-6 items-center justify-center rounded-full text-[11px] font-semibold tabular-nums transition-colors',
-                  state === 'active' && 'bg-primary text-primary-foreground shadow-sm shadow-primary/30',
-                  state === 'done' && 'bg-primary/15 text-primary',
-                  state === 'todo' && 'bg-muted text-muted-foreground',
-                ].filter(Boolean).join(' ')}
+            {canGo ? (
+              <button
+                type="button"
+                onClick={() => onStep(s.key)}
+                aria-label={`Go back to ${s.label}`}
+                className="flex cursor-pointer items-center gap-2 rounded-md px-1.5 py-1 transition-colors hover:bg-muted"
               >
-                {state === 'done' ? '✓' : i + 1}
-              </span>
-              <span
-                className={[
-                  'text-sm transition-colors',
-                  state === 'active' ? 'font-medium text-foreground' : 'text-muted-foreground',
-                ].join(' ')}
-              >
-                {s.label}
-              </span>
-            </div>
+                {inner}
+              </button>
+            ) : (
+              <div className="flex items-center gap-2 px-1.5 py-1">{inner}</div>
+            )}
             {i < STEPS.length - 1 && (
               <span
                 className={[

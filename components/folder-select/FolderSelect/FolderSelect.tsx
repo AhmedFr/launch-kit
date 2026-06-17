@@ -4,9 +4,11 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { toast } from 'sonner'
+import { useRuntimeConfig } from '@/lib/config/RuntimeConfigProvider'
 import type { FolderSelectProps } from './FolderSelect.types'
 
 export function FolderSelect({ path, onPathChange, onAnalyzed }: FolderSelectProps) {
+  const { localFsAvailable } = useRuntimeConfig()
   const [loading, setLoading] = useState(false)
 
   async function analyze() {
@@ -59,15 +61,28 @@ export function FolderSelect({ path, onPathChange, onAnalyzed }: FolderSelectPro
             placeholder="/Users/you/code/your-project"
             className="h-11 font-mono text-sm"
             onChange={(e) => onPathChange(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && analyze()}
+            onKeyDown={(e) => e.key === 'Enter' && localFsAvailable && analyze()}
+            disabled={!localFsAvailable}
           />
         </div>
-        <Button onClick={analyze} disabled={loading} size="lg" className="mt-4 w-full">
+        <Button
+          onClick={analyze}
+          disabled={loading || !localFsAvailable}
+          title={localFsAvailable ? undefined : 'Folder analysis runs locally — clone and run Launch Kit on your machine'}
+          size="lg"
+          className="mt-4 w-full"
+        >
           {loading ? 'Reading your project…' : 'Analyze folder →'}
         </Button>
-        <p className="mt-3 text-center text-xs text-muted-foreground">
-          Runs locally · reads README + package.json · nothing leaves your machine
-        </p>
+        {localFsAvailable ? (
+          <p className="mt-3 text-center text-xs text-muted-foreground">
+            Runs locally · reads README + package.json · nothing leaves your machine
+          </p>
+        ) : (
+          <p className="mt-3 text-center text-xs text-amber-700">
+            Folder analysis runs locally. Clone Launch Kit and run it on your machine to analyze a folder.
+          </p>
+        )}
       </div>
     </div>
   )

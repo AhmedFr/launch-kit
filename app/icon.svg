@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" role="img" aria-label="Launch Kit">
+  <defs>
+    <linearGradient id="lk" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#E96A4D" />
+      <stop offset="1" stop-color="#D6492D" />
+    </linearGradient>
+  </defs>
+  <rect width="32" height="32" rx="7" fill="url(#lk)" />
+  <path d="M16 8.5 L25 22 L7 22 Z" fill="#ffffff" />
+</svg>

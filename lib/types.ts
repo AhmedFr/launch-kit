@@ -19,12 +19,22 @@ export type Refinements = {
   tone?: string
 }
 
-export type SectionKey = 'copy' | 'topicsComment' | 'gallery' | 'video' | 'launch'
-
 export type ShotSpec = { title: string; purpose: string; caption: string; layoutHint: string }
 export type Scene = { timeRange: string; visual: string; onScreenText: string }
 
-export type LaunchKit = {
+// The platform-agnostic essence of a launch. Generated once, never shown raw —
+// it is the shared input every platform's content is written from.
+export type LaunchCore = {
+  productName: string
+  essence: string
+  audience: string
+  problem: string
+  features: string[]
+  differentiators: string[]
+}
+
+// Product Hunt is the richest format: gallery, demo video, maker comment, hunter outreach.
+export type ProductHuntContent = {
   copy: {
     nameSuggestions: string[]
     tagline: string
@@ -42,6 +52,50 @@ export type LaunchKit = {
     launchDayChecklist: string[]
     outreach: { hunter: string; supporters: string }
   }
+}
+
+// Back-compat alias: Product Hunt's content is the original "launch kit" shape.
+export type LaunchKit = ProductHuntContent
+
+// Hacker News is text-first, technical and humble — no gallery, no video.
+export type HackerNewsContent = {
+  title: string
+  postBody: string
+  firstComment: string
+  postingTips: { bestTimeET: string; avoid: string[] }
+}
+
+// Reddit lives in the right subreddit with a value-first, non-salesy post.
+export type RedditContent = {
+  subreddits: { name: string; why: string }[]
+  title: string
+  body: string
+  replyEtiquette: string[]
+}
+
+// AppSumo is a lifetime-deal marketplace listing.
+export type AppSumoContent = {
+  dealHeadline: string
+  pitch: string
+  whatsIncluded: string[]
+  bestFor: string[]
+  faq: { q: string; a: string }[]
+}
+
+// Maps each platform id to its own native content shape.
+export type PlatformContentMap = {
+  'product-hunt': ProductHuntContent
+  appsumo: AppSumoContent
+  'hacker-news': HackerNewsContent
+  reddit: RedditContent
+}
+
+export type PlatformContent = PlatformContentMap[keyof PlatformContentMap]
+
+// The full generation result: a shared core plus whichever platforms succeeded.
+export type Generation = {
+  core: LaunchCore
+  platforms: Partial<PlatformContentMap>
 }
 
 export type GenerateInput = { context: ProjectContext; refinements: Refinements }

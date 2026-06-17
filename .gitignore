@@ -37,3 +37,6 @@ next-env.d.ts
 
 # playwright verification artifacts
 .playwright-mcp/
+
+# internal design docs (kept local, not published)
+docs/superpowers/

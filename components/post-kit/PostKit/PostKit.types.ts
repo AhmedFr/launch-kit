@@ -1,10 +1,12 @@
-import type { LaunchKit, SectionKey } from '@/lib/types'
+import type { Generation } from '@/lib/types'
+import type { PlatformId } from '@/lib/platforms'
 
 export type PostKitProps = {
-  kit: LaunchKit
-  onRegenerateSection: (section: SectionKey) => void
-  regeneratingSection: SectionKey | null
-  onExportMarkdown: () => void
-  onCopyAll: () => void
+  generation: Generation
+  productName: string
+  onRegeneratePlatform: (platform: PlatformId) => void
+  regeneratingPlatform: PlatformId | null
+  onExportMarkdown: (platform: PlatformId) => void
+  onCopyAll: (platform: PlatformId) => void
   onStartOver: () => void
 }

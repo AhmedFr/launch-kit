@@ -1,9 +1,17 @@
 import { NextResponse } from 'next/server'
 import { readFolder } from '@/lib/analyze/read-folder'
+import { localFsAllowed } from '@/lib/config/runtime-config'
 
 export const runtime = 'nodejs'
 
 export async function POST(req: Request) {
+  if (!localFsAllowed()) {
+    return NextResponse.json(
+      { error: 'Launch Kit runs on your machine. Clone the repo and run it locally to analyze a folder.' },
+      { status: 403 },
+    )
+  }
+
   let body: { path?: string }
   try {
     body = await req.json()

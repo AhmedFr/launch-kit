@@ -1,82 +1,109 @@
 'use client'
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
-import { CopySection } from '@/components/post-kit/sections/CopySection'
-import { TopicsCommentSection } from '@/components/post-kit/sections/TopicsCommentSection'
-import { GallerySection } from '@/components/post-kit/sections/GallerySection'
-import { VideoSection } from '@/components/post-kit/sections/VideoSection'
-import { LaunchOpsSection } from '@/components/post-kit/sections/LaunchOpsSection'
-import { ACTIVE_PLATFORM } from '@/lib/platforms'
-import { SECTIONS } from './PostKit.constants'
+import { RegenerateButton } from '@/components/common/RegenerateButton'
+import { PLATFORMS, type PlatformId } from '@/lib/platforms'
+import { PREVIEWS } from '@/lib/preview/registry'
+import { PLATFORM_SECTIONS } from '@/components/post-kit/platforms/registry'
+import { useRuntimeConfig } from '@/lib/config/RuntimeConfigProvider'
+import { canGenerate } from '@/lib/config/runtime-config'
 import type { PostKitProps } from './PostKit.types'
-import type { SectionKey } from '@/lib/types'
 
 export function PostKit({
-  kit,
-  onRegenerateSection,
-  regeneratingSection,
+  generation,
+  productName,
+  onRegeneratePlatform,
+  regeneratingPlatform,
   onExportMarkdown,
   onCopyAll,
   onStartOver,
 }: PostKitProps) {
-  const [active, setActive] = useState<SectionKey>('copy')
-  const busy = (k: SectionKey) => regeneratingSection === k
+  const { core, platforms } = generation
+  const firstReady = PLATFORMS.find((p) => platforms[p.id])?.id ?? 'product-hunt'
+  const [platform, setPlatform] = useState<PlatformId>(firstReady)
+  const [view, setView] = useState<'edit' | 'preview'>('edit')
 
-  const navButton = (s: { key: SectionKey; label: string }) => (
-    <button
-      key={s.key}
-      onClick={() => setActive(s.key)}
-      className={[
-        'whitespace-nowrap rounded-lg px-3 py-2 text-left text-sm transition-colors',
-        active === s.key
-          ? 'bg-primary/10 font-medium text-primary'
-          : 'text-muted-foreground hover:bg-muted',
-      ].join(' ')}
-    >
-      {s.label}
-    </button>
-  )
+  const content = platforms[platform]
+  const Sections = PLATFORM_SECTIONS[platform]
+  const Preview = PREVIEWS[platform]
+  const regenerating = regeneratingPlatform === platform
+  const config = useRuntimeConfig()
+  const canRegenerate = canGenerate(config)
 
   return (
     <div className="mx-auto max-w-5xl px-6">
-      <div className="reveal reveal-1 mb-7 text-center">
-        <span className="text-xs font-medium uppercase tracking-wide text-primary">
-          Your {ACTIVE_PLATFORM.name} kit is ready
-        </span>
+      <div className="reveal reveal-1 mb-6 text-center">
+        <span className="text-xs font-medium uppercase tracking-wide text-primary">Your launch kit is ready</span>
         <h2 className="font-display mx-auto mt-2 max-w-2xl text-balance text-2xl font-bold leading-tight tracking-tight sm:text-3xl">
-          {kit.copy.tagline}
+          {core.essence}
         </h2>
       </div>
 
-      <div className="flex flex-col gap-6 md:flex-row">
-        {/* mobile section tabs */}
-        <nav className="-mx-6 flex gap-1 overflow-x-auto px-6 pb-1 md:hidden">
-          {SECTIONS.map(navButton)}
-        </nav>
+      {/* Platform selector — drives both edit and preview */}
+      <div className="reveal reveal-2 mb-4 flex flex-wrap justify-center gap-2">
+        {PLATFORMS.map((p) => {
+          const ready = Boolean(platforms[p.id])
+          const isActive = platform === p.id
+          return (
+            <button
+              key={p.id}
+              disabled={!ready}
+              onClick={() => ready && setPlatform(p.id)}
+              className={`rounded-full border px-3 py-1.5 text-sm transition-colors ${
+                isActive && ready
+                  ? 'border-primary bg-primary/10 font-medium text-primary'
+                  : ready
+                    ? 'border-border text-muted-foreground hover:bg-muted'
+                    : 'cursor-not-allowed border-dashed border-border text-muted-foreground/60'
+              }`}
+            >
+              {p.name}
+              {!ready && <span className="ml-1 text-[10px] uppercase">failed</span>}
+            </button>
+          )
+        })}
+      </div>
 
-        {/* desktop sidebar */}
-        <aside className="reveal reveal-2 sticky top-20 hidden h-fit w-52 shrink-0 flex-col gap-1 rounded-2xl border border-border bg-card p-2 shadow-sm md:flex">
-          {SECTIONS.map(navButton)}
-          <div className="my-2 h-px bg-border" />
-          <Button variant="outline" size="sm" onClick={onCopyAll}>Copy all</Button>
-          <Button size="sm" onClick={onExportMarkdown}>Export Markdown</Button>
-          <Button variant="ghost" size="sm" onClick={onStartOver}>Start over</Button>
-        </aside>
-
-        <div className="min-w-0 flex-1 space-y-4" key={active}>
-          {active === 'copy' && <CopySection kit={kit} onRegenerate={() => onRegenerateSection('copy')} regenerating={busy('copy')} />}
-          {active === 'topicsComment' && <TopicsCommentSection kit={kit} onRegenerate={() => onRegenerateSection('topicsComment')} regenerating={busy('topicsComment')} />}
-          {active === 'gallery' && <GallerySection kit={kit} onRegenerate={() => onRegenerateSection('gallery')} regenerating={busy('gallery')} />}
-          {active === 'video' && <VideoSection kit={kit} onRegenerate={() => onRegenerateSection('video')} regenerating={busy('video')} />}
-          {active === 'launch' && <LaunchOpsSection kit={kit} onRegenerate={() => onRegenerateSection('launch')} regenerating={busy('launch')} />}
-
-          {/* mobile export actions */}
-          <div className="flex flex-wrap gap-2 md:hidden">
-            <Button variant="outline" size="sm" onClick={onCopyAll}>Copy all</Button>
-            <Button size="sm" onClick={onExportMarkdown}>Export Markdown</Button>
-            <Button variant="ghost" size="sm" onClick={onStartOver}>Start over</Button>
-          </div>
+      {/* Toolbar: Edit | Preview + per-platform actions */}
+      <div className="reveal reveal-2 mb-5 flex flex-wrap items-center justify-between gap-3">
+        <div className="inline-flex rounded-lg border border-border bg-card p-0.5 shadow-sm">
+          {(['edit', 'preview'] as const).map((v) => (
+            <button
+              key={v}
+              onClick={() => setView(v)}
+              className={`rounded-md px-3 py-1.5 text-sm capitalize transition-colors ${
+                view === v ? 'bg-primary text-primary-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              {v}
+            </button>
+          ))}
         </div>
+        <div className="flex flex-wrap items-center gap-2">
+          <RegenerateButton
+            onClick={() => onRegeneratePlatform(platform)}
+            regenerating={regenerating}
+            disabled={!canRegenerate}
+            title={canRegenerate ? undefined : 'Add OPENROUTER_API_KEY to your .env to regenerate'}
+          />
+          <Button variant="outline" size="sm" onClick={() => onCopyAll(platform)}>Copy all</Button>
+          <Button size="sm" onClick={() => onExportMarkdown(platform)}>Export Markdown</Button>
+          <Button variant="ghost" size="sm" onClick={onStartOver}>Start over</Button>
+        </div>
+      </div>
+
+      <div key={`${platform}-${view}`} className="reveal reveal-2">
+        {!content ? (
+          <p className="text-center text-sm text-muted-foreground">
+            This platform didn&apos;t generate. Switch to a ready platform, or start over to try again.
+          </p>
+        ) : view === 'edit' ? (
+          Sections ? <Sections core={core} content={content} loading={regenerating} /> : null
+        ) : Preview ? (
+          <Preview core={core} content={content} productName={productName} />
+        ) : (
+          <p className="text-center text-sm text-muted-foreground">No preview for this platform yet.</p>
+        )}
       </div>
     </div>
   )
