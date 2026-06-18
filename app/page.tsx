@@ -146,10 +146,11 @@ export default function Landing() {
           <h2 className="font-display mx-auto max-w-xl text-balance text-3xl font-extrabold tracking-tight sm:text-4xl">
             Your next launch is one folder away
           </h2>
-          {/* STARS MILESTONE — replace the reward with whatever you want to ship at 50 ⭐ */}
+          {/* STARS MILESTONE — reward at 50 ⭐ */}
           <p className="mx-auto mt-4 max-w-md text-sm text-muted-foreground">
             <span aria-hidden>⭐</span> Hit <span className="font-semibold text-foreground">50 stars</span> and I&apos;ll
-            add <span className="font-semibold text-foreground">[your reward here]</span>.
+            ship a <span className="font-semibold text-foreground">free hosted version</span> — Launch Kit in your
+            browser, no clone and no API key.
           </p>
           <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
             <Link href="/runs" className={buttonVariants({ size: 'lg' })}>

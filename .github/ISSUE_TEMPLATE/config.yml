@@ -1,0 +1,6 @@
+# Nudge contributors toward the structured templates above.
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 Question or idea
+    url: https://github.com/AhmedFr/launch-kit/discussions
+    about: For questions and open-ended ideas, start a Discussion instead of an issue.
