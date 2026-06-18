@@ -6,6 +6,7 @@
 
 Point Launch Kit at a project folder. It reads your README and drafts **launch‑ready posts — written natively for [Product Hunt, Hacker News, Reddit, and AppSumo](#-one-repo-every-audience)**. Runs 100% on your machine. Bring your own [OpenRouter](https://openrouter.ai) key.
 
+[![CI](https://img.shields.io/github/actions/workflow/status/AhmedFr/launch-kit/ci.yml?branch=main&style=for-the-badge&logo=githubactions&logoColor=white&label=CI&color=E2563C&labelColor=1c1c1c)](https://github.com/AhmedFr/launch-kit/actions/workflows/ci.yml)
 [![GitHub stars](https://img.shields.io/github/stars/AhmedFr/launch-kit?style=for-the-badge&logo=github&color=E2563C&labelColor=1c1c1c)](https://github.com/AhmedFr/launch-kit/stargazers)
 [![License: MIT](https://img.shields.io/badge/License-MIT-E2563C?style=for-the-badge&labelColor=1c1c1c)](./LICENSE)
 [![Next.js](https://img.shields.io/badge/Next.js-16-1c1c1c?style=for-the-badge&logo=nextdotjs)](https://nextjs.org)
@@ -75,8 +76,7 @@ Launch Kit reads files from disk, so it's built to run **on your machine** — y
 
 ## ⭐ Star milestone
 
-<!-- Replace [your reward] with whatever you want to ship at the milestone. -->
-> **⭐ Hit 50 stars and I'll add [your reward].** If Launch Kit saves you a launch, a star genuinely helps.
+> **⭐ Hit 50 stars and I'll ship a free hosted version** — Launch Kit running in your browser, no clone and no API key required. If Launch Kit saves you a launch, a star genuinely helps.
 
 ## 🛠️ Tech stack
 
