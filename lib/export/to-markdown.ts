@@ -5,6 +5,7 @@ import type {
   PlatformContent,
   ProductHuntContent,
   RedditContent,
+  SocialContent,
 } from '@/lib/types'
 import type { PlatformId } from '@/lib/platforms'
 
@@ -46,7 +47,7 @@ ${bullets(launch.prelaunchChecklist)}
 
 ### Launch day
 ${bullets(launch.launchDayChecklist)}
-
+${launch.hourByHour?.length ? `\n### Hour-by-hour (PT)\n${launch.hourByHour.map((s) => `- \`${s.timePT}\` — ${s.action}`).join('\n')}\n` : ''}${launch.momentumTactics?.length ? `\n### Upvote momentum\n${bullets(launch.momentumTactics)}\n` : ''}${launch.commentModeration?.length ? `\n### Comment moderation\n${bullets(launch.commentModeration)}\n` : ''}
 ### Outreach — Hunter
 ${launch.outreach.hunter}
 
@@ -72,15 +73,15 @@ ${hn.firstComment}
 
 Avoid:
 ${bullets(hn.postingTips.avoid)}
-`
+${hn.postingTips.etiquette?.length ? `\nEtiquette:\n${bullets(hn.postingTips.etiquette)}\n` : ''}`
 }
 
 function redditMarkdown(core: LaunchCore, reddit: RedditContent): string {
   return `# ${core.productName} — Reddit Launch Post
 
 ## Subreddits
-${reddit.subreddits.map((s) => `- **${s.name}** — ${s.why}`).join('\n')}
-
+${reddit.subreddits.map((s) => `- **${s.name}** — ${s.why}${s.rulesNote ? `\n  - ⚑ ${s.rulesNote}` : ''}`).join('\n')}
+${reddit.postingTiming ? `\n**Best timing:** ${reddit.postingTiming}\n` : ''}
 ## Title
 ${reddit.title}
 
@@ -112,6 +113,32 @@ ${deal.faq.map((f) => `**${f.q}**\n${f.a}`).join('\n\n')}
 `
 }
 
+function socialMarkdown(core: LaunchCore, social: SocialContent): string {
+  return `# ${core.productName} — Social / KOL Launch Kit
+
+## X Launch Thread
+${social.thread.tweets.map((t, i) => `${i + 1}. ${t}`).join('\n\n')}
+
+## KOL Outreach
+**X / Twitter:**
+${social.kolOutreach.twitter}
+
+**LinkedIn:**
+${social.kolOutreach.linkedin}
+
+**Telegram:**
+${social.kolOutreach.telegram}
+
+## UGC Ask
+${social.ugcAsk}
+
+## Posting Tips
+**Best time:** ${social.postingTips.bestTimeET}
+
+Hashtags: ${social.postingTips.hashtags.join(' ')}
+`
+}
+
 export function platformToMarkdown(platform: PlatformId, core: LaunchCore, content: PlatformContent): string {
   switch (platform) {
     case 'product-hunt':
@@ -122,5 +149,7 @@ export function platformToMarkdown(platform: PlatformId, core: LaunchCore, conte
       return redditMarkdown(core, content as RedditContent)
     case 'appsumo':
       return appSumoMarkdown(core, content as AppSumoContent)
+    case 'social':
+      return socialMarkdown(core, content as SocialContent)
   }
 }

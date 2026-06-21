@@ -4,6 +4,7 @@ import { productHuntSchema } from './platforms/product-hunt/schema'
 import { hackerNewsSchema } from './platforms/hacker-news/schema'
 import { redditSchema } from './platforms/reddit/schema'
 import { appSumoSchema } from './platforms/appsumo/schema'
+import { socialSchema } from './platforms/social/schema'
 
 const core = {
   productName: 'Acme',
@@ -12,6 +13,9 @@ const core = {
   problem: 'Shipping is slow.',
   features: ['Fast builds'],
   differentiators: ['Zero config'],
+  valueProp: 'Ship in minutes, not days.',
+  icp: 'Seed-stage dev teams shipping weekly',
+  keywords: ['ci', 'builds', 'developer tools'],
 }
 
 const productHunt = {
@@ -45,12 +49,24 @@ const appSumo = {
   faq: [{ q: 'Is it really lifetime?', a: 'Yes.' }],
 }
 
+const social = {
+  thread: { tweets: ['Devs: shipping is slow. I built Acme. 🧵', 'It does X, Y, Z.', 'Live today — try it.'] },
+  kolOutreach: { twitter: 'Hey {name}...', linkedin: 'Hi {name}...', telegram: 'Hi {name}!' },
+  ugcAsk: 'Would you share how you use Acme?',
+  postingTips: { bestTimeET: '9:00 AM ET', hashtags: ['#buildinpublic'] },
+}
+
 describe('launchCoreSchema', () => {
   it('accepts a valid core', () => {
     expect(launchCoreSchema.parse(core)).toEqual(core)
   })
   it('rejects a core missing essence', () => {
     expect(() => launchCoreSchema.parse({ ...core, essence: undefined })).toThrow()
+  })
+  it('accepts a core without the optional enrichment fields (back-compat)', () => {
+    const { valueProp, icp, keywords, ...legacy } = core
+    void valueProp; void icp; void keywords
+    expect(() => launchCoreSchema.parse(legacy)).not.toThrow()
   })
 })
 
@@ -87,5 +103,17 @@ describe('appSumoSchema', () => {
   })
   it('rejects content with a malformed faq entry', () => {
     expect(() => appSumoSchema.parse({ ...appSumo, faq: [{ q: 'no answer' }] })).toThrow()
+  })
+})
+
+describe('socialSchema', () => {
+  it('accepts valid Social content', () => {
+    expect(socialSchema.parse(social)).toEqual(social)
+  })
+  it('rejects content missing the thread', () => {
+    expect(() => socialSchema.parse({ ...social, thread: undefined })).toThrow()
+  })
+  it('rejects outreach missing a channel', () => {
+    expect(() => socialSchema.parse({ ...social, kolOutreach: { twitter: 'a', linkedin: 'b' } })).toThrow()
   })
 })

@@ -1,17 +1,21 @@
 import type { GenerateInput, LaunchCore } from '@/lib/types'
-import { renderCore, renderRefinements } from '../../prompt-shared'
+import { PLAYBOOK_PRINCIPLES, renderCore, renderRefinements } from '../../prompt-shared'
 
 export const REDDIT_SYSTEM = [
+  PLAYBOOK_PRINCIPLES,
+  '',
   'You are a Reddit-native maker who knows each subreddit has its own culture and self-promotion rules.',
   'Redditors punish salesy, promotional posts. Be transparent that you are the maker, lead with value or a story, and never sound like an ad.',
+  'Concentrate on the one or two subreddits where you are a genuine member; depth of value beats breadth of posting.',
   'You ALWAYS reply with a single raw JSON object and nothing else — no markdown, no code fences, no commentary.',
-].join(' ')
+].join('\n')
 
 const SHAPE = `{
-  "subreddits": [ { "name": "r/...", "why": "why this subreddit fits and its self-promo norm" } ],
+  "subreddits": [ { "name": "r/...", "why": "why this subreddit fits and its self-promo norm", "rulesNote": "its specific rule to respect — self-promo ratio, required flair, or 'comment before you post'" } ],
   "title": "a non-clickbait, value-first post title that respects subreddit norms",
   "body": "the post body: tell a story or give value, be transparent you built it; \\n for line breaks",
-  "replyEtiquette": ["4-5 rules for engaging the comments and respecting self-promo norms"]
+  "replyEtiquette": ["4-5 rules for engaging the comments and respecting self-promo norms"],
+  "postingTiming": "the best day/time to post given these subreddits' activity and norms"
 }`
 
 export function buildRedditPrompt(core: LaunchCore, input: GenerateInput): string {

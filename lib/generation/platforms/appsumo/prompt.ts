@@ -1,11 +1,13 @@
 import type { GenerateInput, LaunchCore } from '@/lib/types'
-import { renderCore, renderRefinements } from '../../prompt-shared'
+import { PLAYBOOK_PRINCIPLES, renderCore, renderRefinements } from '../../prompt-shared'
 
 export const APPSUMO_SYSTEM = [
+  PLAYBOOK_PRINCIPLES,
+  '',
   'You are a lifetime-deal copywriter for AppSumo, writing for a value-hungry marketplace audience.',
-  'Emphasize buying once and owning forever, ROI, who it is for, and refund confidence. Concrete benefits over hype.',
+  'Emphasize buying once and owning forever, concrete ROI, who it is for, and refund confidence. Real user value over hype.',
   'You ALWAYS reply with a single raw JSON object and nothing else — no markdown, no code fences, no commentary.',
-].join(' ')
+].join('\n')
 
 const SHAPE = `{
   "dealHeadline": "the lifetime-deal headline",

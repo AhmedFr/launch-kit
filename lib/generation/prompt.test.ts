@@ -33,8 +33,8 @@ describe('buildCorePrompt', () => {
 })
 
 describe('PLATFORM_GENERATORS', () => {
-  it('covers all four platforms with schema, system, and buildPrompt', () => {
-    for (const id of ['product-hunt', 'appsumo', 'hacker-news', 'reddit'] as const) {
+  it('covers every platform with schema, system, and buildPrompt', () => {
+    for (const id of ['product-hunt', 'appsumo', 'hacker-news', 'reddit', 'social'] as const) {
       const gen = PLATFORM_GENERATORS[id]
       expect(gen.schema).toBeDefined()
       expect(gen.system.length).toBeGreaterThan(0)
@@ -58,5 +58,9 @@ describe('PLATFORM_GENERATORS', () => {
 
   it('builds an AppSumo prompt framed around a lifetime deal', () => {
     expect(PLATFORM_GENERATORS['appsumo'].buildPrompt(core, input).toLowerCase()).toContain('lifetime')
+  })
+
+  it('builds a Social prompt that asks for a launch thread', () => {
+    expect(PLATFORM_GENERATORS['social'].buildPrompt(core, input).toLowerCase()).toContain('thread')
   })
 })

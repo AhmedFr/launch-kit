@@ -4,7 +4,7 @@
 
 ### Turn your repo into a launch worth upvoting.
 
-Point Launch Kit at a project folder. It reads your README and drafts **launch‑ready posts — written natively for [Product Hunt, Hacker News, Reddit, and AppSumo](#-one-repo-every-audience)**. Runs 100% on your machine. Bring your own [OpenRouter](https://openrouter.ai) key.
+Point Launch Kit at a project folder. It reads your README and drafts **launch‑ready posts — written natively for [Product Hunt, Hacker News, Reddit, AppSumo, and X / social](#-one-repo-every-audience)** — plus a full cross‑platform launch plan. Runs 100% on your machine. Bring your own [OpenRouter](https://openrouter.ai) key.
 
 [![CI](https://img.shields.io/github/actions/workflow/status/AhmedFr/launch-kit/ci.yml?branch=main&style=for-the-badge&logo=githubactions&logoColor=white&label=CI&color=E2563C&labelColor=1c1c1c)](https://github.com/AhmedFr/launch-kit/actions/workflows/ci.yml)
 [![GitHub stars](https://img.shields.io/github/stars/AhmedFr/launch-kit?style=for-the-badge&logo=github&color=E2563C&labelColor=1c1c1c)](https://github.com/AhmedFr/launch-kit/stargazers)
@@ -20,9 +20,10 @@ Point Launch Kit at a project folder. It reads your README and drafts **launch�
 
 ## ✨ What you get
 
-- **One core, four native posts.** Launch Kit distills your project once, then rewrites it for each platform's audience — not one blurb copy‑pasted everywhere.
-- **A guided launch, not just copy.** Gallery shot lists, a demo‑video storyboard, posting times, and a launch‑day checklist.
-- **Live previews.** See each post rendered the way it'll actually look on Product Hunt, HN, Reddit, and AppSumo.
+- **One core, five native posts.** Launch Kit distills your project once, then rewrites it for each platform's audience — not one blurb copy‑pasted everywhere.
+- **A guided launch, not just copy.** A cross‑platform launch plan (L‑6 weeks → L+4 weeks with 30/7/48h countdowns, SEO/GEO, and post‑launch momentum), plus gallery shot lists, a demo‑video storyboard, posting times, a Product Hunt hour‑by‑hour battle plan, and KOL/UGC outreach templates.
+- **Battle‑tested playbook baked in.** Every prompt is shaped by proven launch principles — user value first, content over channel, and concentrated, genuine momentum over vanity reach.
+- **Live previews.** See each post rendered the way it'll actually look on Product Hunt, HN, Reddit, AppSumo, and X.
 - **Your runs, saved.** Every folder you launch is kept locally so you can pick up where you left off.
 - **Private by design.** Your code and README never leave your machine. No backend, no database, no account.
 - **Bring your own key.** Use the built‑in mock generator key‑free, or plug in your OpenRouter key for the real thing.
@@ -63,10 +64,13 @@ A three‑step wizard, one run per folder:
 
 | Platform | What Launch Kit writes |
 | --- | --- |
-| **Product Hunt** | Tagline + alternatives, description, topics, gallery shot list, video storyboard, maker's first comment, launch‑day ops & outreach |
-| **Hacker News** | A `Show HN:` title, an honest technical post, your first comment, and posting tips |
-| **Reddit** | Subreddit recommendations, a value‑first title + body, and comment etiquette |
+| **Product Hunt** | Tagline + alternatives, description, topics, gallery shot list, video storyboard, maker's first comment, and launch‑day ops: hour‑by‑hour battle plan, upvote‑momentum tactics, comment moderation & outreach |
+| **Hacker News** | A `Show HN:` title, an honest technical post, your first comment, posting tips, and engagement etiquette |
+| **Reddit** | Subreddit recommendations with per‑sub rules, recommended posting timing, a value‑first title + body, and comment etiquette |
 | **AppSumo** | Deal headline, lifetime‑deal pitch, what's included, who it's for, and an FAQ |
+| **Social / KOL** | An X (Twitter) launch thread, cold‑outreach DM templates for X / LinkedIn / Telegram influencers, and a UGC ask to turn early users into creators |
+
+Plus a **cross‑platform launch plan** spanning every channel: a 10‑week timeline (L‑6 weeks → L+4 weeks), 30/7/48‑hour pre‑launch countdowns, a keyword‑driven SEO/GEO checklist, and a post‑launch momentum cadence.
 
 ![Per-platform launch kit](docs/screenshots/kit.png)
 

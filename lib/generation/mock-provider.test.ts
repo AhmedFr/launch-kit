@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { MockProvider } from './mock-provider'
 import { launchCoreSchema } from './core/core.schema'
+import { launchPlanSchema } from './plan/plan.schema'
 import { PLATFORM_GENERATORS } from './platforms/registry'
 import type { GenerateInput } from '@/lib/types'
 import type { PlatformId } from '@/lib/platforms'
@@ -14,7 +15,7 @@ const input: GenerateInput = {
   refinements: { tone: 'bold', audience: 'developers' },
 }
 
-const PLATFORMS: PlatformId[] = ['product-hunt', 'appsumo', 'hacker-news', 'reddit']
+const PLATFORMS: PlatformId[] = ['product-hunt', 'appsumo', 'hacker-news', 'reddit', 'social']
 
 describe('MockProvider', () => {
   it('produces a schema-valid core that references the product', async () => {
@@ -36,5 +37,14 @@ describe('MockProvider', () => {
     const core = await provider.generateCore(input)
     const content = await provider.generatePlatform('product-hunt', core, input)
     expect((content as { copy: { tagline: string } }).copy.tagline.length).toBeLessThanOrEqual(60)
+  })
+
+  it('produces a schema-valid launch plan spanning the timeline', async () => {
+    const provider = new MockProvider()
+    const core = await provider.generateCore(input)
+    const plan = await provider.generatePlan(core, input)
+    expect(() => launchPlanSchema.parse(plan)).not.toThrow()
+    expect(plan.phases.length).toBeGreaterThan(0)
+    expect(plan.seoGeo.length).toBeGreaterThan(0)
   })
 })

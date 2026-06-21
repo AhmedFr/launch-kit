@@ -35,8 +35,14 @@ export async function POST(req: Request) {
       return NextResponse.json({ platform: body.platform, content })
     }
 
-    // Full generation: distill the core once, then fan out to every platform in parallel.
+    // Full generation: distill the core once, then fan out to every platform in
+    // parallel, plus the cross-platform launch plan. The plan is best-effort — a
+    // failure there must not sink the whole generation.
     const core = await provider.generateCore(input)
+    const planPromise = provider.generatePlan(core, input).catch((err) => {
+      console.error('[api/generate] plan failed:', err?.message ?? err)
+      return undefined
+    })
     const results = await Promise.allSettled(
       PLATFORM_IDS.map((id) => provider.generatePlatform(id, core, input)),
     )
@@ -60,6 +66,8 @@ export async function POST(req: Request) {
     }
 
     const generation: Generation = { core, platforms }
+    const plan = await planPromise
+    if (plan) generation.plan = plan
     return NextResponse.json({ generation, failed })
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Generation failed.'
