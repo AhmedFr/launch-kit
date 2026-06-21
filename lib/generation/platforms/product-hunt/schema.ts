@@ -20,6 +20,10 @@ export const productHuntSchema = z.object({
     recommendedTimePT: z.string(),
     prelaunchChecklist: z.array(z.string()),
     launchDayChecklist: z.array(z.string()),
+    // Playbook additions — optional for back-compat with kits persisted before they existed.
+    hourByHour: z.array(z.object({ timePT: z.string(), action: z.string() })).optional(),
+    momentumTactics: z.array(z.string()).optional(),
+    commentModeration: z.array(z.string()).optional(),
     outreach: z.object({ hunter: z.string(), supporters: z.string() }),
   }),
 })

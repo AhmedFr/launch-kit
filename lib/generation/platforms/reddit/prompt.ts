@@ -11,10 +11,11 @@ export const REDDIT_SYSTEM = [
 ].join('\n')
 
 const SHAPE = `{
-  "subreddits": [ { "name": "r/...", "why": "why this subreddit fits and its self-promo norm" } ],
+  "subreddits": [ { "name": "r/...", "why": "why this subreddit fits and its self-promo norm", "rulesNote": "its specific rule to respect — self-promo ratio, required flair, or 'comment before you post'" } ],
   "title": "a non-clickbait, value-first post title that respects subreddit norms",
   "body": "the post body: tell a story or give value, be transparent you built it; \\n for line breaks",
-  "replyEtiquette": ["4-5 rules for engaging the comments and respecting self-promo norms"]
+  "replyEtiquette": ["4-5 rules for engaging the comments and respecting self-promo norms"],
+  "postingTiming": "the best day/time to post given these subreddits' activity and norms"
 }`
 
 export function buildRedditPrompt(core: LaunchCore, input: GenerateInput): string {

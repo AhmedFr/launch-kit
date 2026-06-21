@@ -39,6 +39,12 @@ export function HackerNewsSections({ content, loading = false }: PlatformSection
           <div className="text-xs uppercase text-muted-foreground">Avoid</div>
           <ul className="list-disc pl-5">{hn.postingTips.avoid.map((a) => <li key={a}>{a}</li>)}</ul>
         </div>
+        {hn.postingTips.etiquette && hn.postingTips.etiquette.length > 0 && (
+          <div>
+            <div className="text-xs uppercase text-muted-foreground">Etiquette</div>
+            <ul className="list-disc pl-5">{hn.postingTips.etiquette.map((e) => <li key={e}>{e}</li>)}</ul>
+          </div>
+        )}
       </SectionCard>
     </div>
   )

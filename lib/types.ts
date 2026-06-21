@@ -54,6 +54,10 @@ export type ProductHuntContent = {
     recommendedTimePT: string
     prelaunchChecklist: string[]
     launchDayChecklist: string[]
+    // Playbook additions — optional for back-compat with kits persisted before they existed.
+    hourByHour?: { timePT: string; action: string }[]
+    momentumTactics?: string[]
+    commentModeration?: string[]
     outreach: { hunter: string; supporters: string }
   }
 }
@@ -66,15 +70,18 @@ export type HackerNewsContent = {
   title: string
   postBody: string
   firstComment: string
-  postingTips: { bestTimeET: string; avoid: string[] }
+  // etiquette is optional for back-compat with content persisted before it existed.
+  postingTips: { bestTimeET: string; avoid: string[]; etiquette?: string[] }
 }
 
 // Reddit lives in the right subreddit with a value-first, non-salesy post.
 export type RedditContent = {
-  subreddits: { name: string; why: string }[]
+  // rulesNote / postingTiming are optional for back-compat with content persisted before they existed.
+  subreddits: { name: string; why: string; rulesNote?: string }[]
   title: string
   body: string
   replyEtiquette: string[]
+  postingTiming?: string
 }
 
 // AppSumo is a lifetime-deal marketplace listing.

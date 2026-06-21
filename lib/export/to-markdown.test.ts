@@ -12,21 +12,28 @@ const ph: ProductHuntContent = {
   firstComment: 'Hey hunters!',
   gallery: { shots: [{ title: 'Hero', purpose: 'wow', caption: 'cap', layoutHint: 'full-bleed' }] },
   video: { hook: 'Tired?', scenes: [{ timeRange: '0-3s', visual: 'logo', onScreenText: 'Acme' }], lengthSec: 30, cta: 'Try it' },
-  launch: { recommendedDay: 'Tuesday', recommendedTimePT: '12:01 AM PT', prelaunchChecklist: ['a'], launchDayChecklist: ['b'], outreach: { hunter: 'hi', supporters: 'yo' } },
+  launch: {
+    recommendedDay: 'Tuesday', recommendedTimePT: '12:01 AM PT', prelaunchChecklist: ['a'], launchDayChecklist: ['b'],
+    hourByHour: [{ timePT: '12:01 AM PT', action: 'Go live' }],
+    momentumTactics: ['Ask for honest comments'],
+    commentModeration: ['Reply fast'],
+    outreach: { hunter: 'hi', supporters: 'yo' },
+  },
 }
 
 const hn: HackerNewsContent = {
   title: 'Show HN: Acme – ship faster',
   postBody: 'I built Acme to make builds fast.',
   firstComment: 'Happy to answer questions.',
-  postingTips: { bestTimeET: '8:00 AM ET', avoid: ['hype'] },
+  postingTips: { bestTimeET: '8:00 AM ET', avoid: ['hype'], etiquette: ['Answer critique directly'] },
 }
 
 const reddit: RedditContent = {
-  subreddits: [{ name: 'r/SideProject', why: 'makers share early projects' }],
+  subreddits: [{ name: 'r/SideProject', why: 'makers share early projects', rulesNote: 'Lead with value' }],
   title: 'I built Acme',
   body: 'Story here.',
   replyEtiquette: ['Reply to everyone'],
+  postingTiming: 'Weekday mornings ET',
 }
 
 const appSumo: AppSumoContent = {
@@ -45,6 +52,9 @@ describe('platformToMarkdown', () => {
     expect(md).toContain('## Gallery')
     expect(md).toContain('## Demo Video')
     expect(md).toContain('Tuesday')
+    expect(md).toContain('### Hour-by-hour (PT)')
+    expect(md).toContain('### Upvote momentum')
+    expect(md).toContain('### Comment moderation')
   })
 
   it('renders Hacker News content without a gallery section', () => {
@@ -52,12 +62,15 @@ describe('platformToMarkdown', () => {
     expect(md).toContain('Show HN: Acme – ship faster')
     expect(md).toContain('I built Acme to make builds fast.')
     expect(md).not.toContain('## Gallery')
+    expect(md).toContain('Etiquette:')
   })
 
   it('renders Reddit content with subreddits', () => {
     const md = platformToMarkdown('reddit', core, reddit)
     expect(md).toContain('r/SideProject')
     expect(md).toContain('Story here.')
+    expect(md).toContain('Lead with value')
+    expect(md).toContain('Best timing:')
   })
 
   it('renders AppSumo content with the deal headline', () => {

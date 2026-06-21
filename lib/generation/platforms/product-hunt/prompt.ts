@@ -35,6 +35,9 @@ const SHAPE = `{
     "recommendedTimePT": "e.g. 12:01 AM PT",
     "prelaunchChecklist": ["4-5 concrete pre-launch tasks"],
     "launchDayChecklist": ["4-5 concrete launch-day tasks"],
+    "hourByHour": [ { "timePT": "e.g. 12:01 AM PT", "action": "what to do in this window to build and hold momentum" } ],
+    "momentumTactics": ["3-4 upvote-momentum tactics: stagger genuine supporters, ask for an honest comment + upvote, never buy votes"],
+    "commentModeration": ["3-4 rules for triaging and replying to comments fast to sustain ranking"],
     "outreach": {
       "hunter": "a DM asking someone to hunt the product (use {name})",
       "supporters": "a message rallying supporters (use {link})"
@@ -53,6 +56,7 @@ export function buildProductHuntPrompt(core: LaunchCore, input: GenerateInput): 
     SHAPE,
     '',
     'Provide 4 gallery shots and 4-5 video scenes. Keep the tagline at or under 60 characters.',
+    'Provide a 6-8 step hour-by-hour launch-day timeline in Pacific Time, starting at 12:01 AM PT and covering the first-comment pin, an early reply blitz, a mid-day traction update, and a final push.',
   ]
     .filter(Boolean)
     .join('\n')

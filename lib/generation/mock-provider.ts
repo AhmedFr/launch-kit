@@ -84,6 +84,28 @@ function buildProductHunt(core: LaunchCore): ProductHuntContent {
         'Share to your channels (X, LinkedIn, Slack/Discord)',
         'Post a mid-day update with traction',
       ],
+      hourByHour: [
+        { timePT: '12:01 AM PT', action: 'Go live and pin your first comment' },
+        { timePT: '12:05–2:00 AM PT', action: 'Message your first cohort of genuine supporters to take a look' },
+        { timePT: '6:00–9:00 AM PT', action: 'US wakes up — reply to every comment within minutes' },
+        { timePT: '9:00 AM–12:00 PM PT', action: 'Share to X, LinkedIn and your communities with the live link' },
+        { timePT: '12:00–2:00 PM PT', action: 'Post a mid-day traction update to re-engage early supporters' },
+        { timePT: '2:00–6:00 PM PT', action: 'Keep answering comments; thank everyone who upvoted or shared' },
+        { timePT: '6:00–9:00 PM PT', action: 'Final push to fence-sitters; ask for honest comments, not just upvotes' },
+        { timePT: '9:00–11:59 PM PT', action: 'Last-call message and a thank-you to the community' },
+      ],
+      momentumTactics: [
+        'Stagger outreach to real supporters across the day so engagement stays steady, not front-loaded',
+        'Ask for an honest comment plus an upvote — comments weigh on ranking and credibility',
+        'Reply fast and personally; an active maker thread pulls more visitors in',
+        'Never buy or trade votes — Product Hunt detects it and it tanks ranking',
+      ],
+      commentModeration: [
+        'Triage every comment within minutes for the first 6 hours',
+        'Answer hard questions directly and publicly — defensiveness reads worse than a flaw',
+        'Thank supporters by name; turn praise into a follow-up question to keep the thread alive',
+        'Pin the most useful exchange so newcomers see the product in use',
+      ],
       outreach: {
         hunter: `Hi {name}, I'm launching ${name} (${benefit}) on Product Hunt and admire your eye for ${audience} tools. Would you be open to hunting it? Assets ready to go.`,
         supporters: `Hey! ${name} is live on Product Hunt today 🚀 If it looks useful, an upvote and an honest comment would mean a lot: {link}`,
@@ -107,6 +129,12 @@ function buildHackerNews(core: LaunchCore): HackerNewsContent {
     postingTips: {
       bestTimeET: '8:00–10:00 AM ET, Tuesday–Thursday',
       avoid: ['Marketing language or superlatives', 'Emoji and exclamation marks', 'Vague claims without specifics', 'Asking directly for upvotes'],
+      etiquette: [
+        'Answer technical critique directly and without defensiveness',
+        'Be candid about trade-offs and what is still rough',
+        'Reply in the first person as the maker, with specifics',
+        'Let the work speak — never ask for upvotes',
+      ],
     },
   }
 }
@@ -115,9 +143,9 @@ function buildReddit(core: LaunchCore): RedditContent {
   const { productName: name, audience, essence, problem, features: feat } = core
   return {
     subreddits: [
-      { name: 'r/SideProject', why: 'makers share and get feedback on early projects' },
-      { name: 'r/startups', why: 'founders discuss building and launching' },
-      { name: 'r/Entrepreneur', why: 'a broad audience open to useful tools, if you lead with value' },
+      { name: 'r/SideProject', why: 'makers share and get feedback on early projects', rulesNote: 'Sharing is welcome; still lead with what you learned, not a pitch' },
+      { name: 'r/startups', why: 'founders discuss building and launching', rulesNote: 'Self-promo is restricted to specific threads — check the rules before posting' },
+      { name: 'r/Entrepreneur', why: 'a broad audience open to useful tools, if you lead with value', rulesNote: 'Heavy self-promo filter; comment and contribute before linking' },
     ],
     title: `I built ${name} to help ${audience} — ${essence}`,
     body:
@@ -130,6 +158,7 @@ function buildReddit(core: LaunchCore): RedditContent {
       "Don't drop links until asked, or only where the sub's rules allow",
       'Give value in comments before promoting',
     ],
+    postingTiming: 'Weekday mornings (8–10 AM ET) when these subs are most active; avoid weekends',
   }
 }
 

@@ -10,12 +10,21 @@ export function RedditSections({ content, loading = false }: PlatformSectionsPro
       <SectionCard title="Where to post" loading={loading}>
         <ul className="space-y-2">
           {reddit.subreddits.map((s) => (
-            <li key={s.name} className="flex flex-wrap gap-x-2">
-              <span className="font-medium text-foreground">{s.name}</span>
-              <span className="text-muted-foreground">— {s.why}</span>
+            <li key={s.name} className="flex flex-col">
+              <span className="flex flex-wrap gap-x-2">
+                <span className="font-medium text-foreground">{s.name}</span>
+                <span className="text-muted-foreground">— {s.why}</span>
+              </span>
+              {s.rulesNote && <span className="text-xs text-muted-foreground/80">⚑ {s.rulesNote}</span>}
             </li>
           ))}
         </ul>
+        {reddit.postingTiming && (
+          <div className="mt-3 flex items-center gap-2 rounded-xl bg-primary/10 px-3 py-2">
+            <span aria-hidden>🕐</span>
+            <span><span className="font-medium">Best timing:</span> {reddit.postingTiming}</span>
+          </div>
+        )}
       </SectionCard>
 
       <SectionCard title="Post" loading={loading}>

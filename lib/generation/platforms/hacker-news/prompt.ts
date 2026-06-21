@@ -17,7 +17,8 @@ const SHAPE = `{
   "firstComment": "your first comment: extra technical context + one specific question inviting feedback",
   "postingTips": {
     "bestTimeET": "best day and time to post, in US Eastern Time",
-    "avoid": ["3-4 things to avoid when posting this on HN"]
+    "avoid": ["3-4 things to avoid when posting this on HN"],
+    "etiquette": ["3-4 rules for engaging authentically: answer critique directly, stay humble, no vote-asking, reply technically"]
   }
 }`
 
