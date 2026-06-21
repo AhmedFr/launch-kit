@@ -14,7 +14,7 @@ const input: GenerateInput = {
   refinements: { tone: 'bold', audience: 'developers' },
 }
 
-const PLATFORMS: PlatformId[] = ['product-hunt', 'appsumo', 'hacker-news', 'reddit']
+const PLATFORMS: PlatformId[] = ['product-hunt', 'appsumo', 'hacker-news', 'reddit', 'social']
 
 describe('MockProvider', () => {
   it('produces a schema-valid core that references the product', async () => {

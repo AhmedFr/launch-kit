@@ -6,6 +6,7 @@ import type {
   PlatformContent,
   ProductHuntContent,
   RedditContent,
+  SocialContent,
 } from '@/lib/types'
 import type { PlatformId } from '@/lib/platforms'
 import type { GenerationProvider } from './provider.types'
@@ -179,6 +180,32 @@ function buildAppSumo(core: LaunchCore): AppSumoContent {
   }
 }
 
+function buildSocial(core: LaunchCore): SocialContent {
+  const { productName: name, audience, essence, problem, features: feat, keywords } = core
+  const tags = (keywords?.length ? keywords : ['buildinpublic', 'indiehackers']).slice(0, 3).map((k) => `#${k.replace(/[^a-zA-Z0-9]/g, '')}`)
+  return {
+    thread: {
+      tweets: [
+        `${audience}: ${problem} I got tired of it, so I built ${name}. 🧵`,
+        `${name} ${essence.charAt(0).toLowerCase()}${essence.slice(1)}`,
+        `What it does:\n${feat.slice(0, 3).map((f) => `→ ${f}`).join('\n')}`,
+        `I built it because the existing tools didn't fit how ${audience} actually work.`,
+        `It's live today and free to try. If you've felt this pain, I'd love your honest take. 👇`,
+      ],
+    },
+    kolOutreach: {
+      twitter: `Hey {name} — love how you cover tools for ${audience}. I just launched ${name} (${essence}). Thought it might resonate with your audience — happy to send free access if you want to take a look, no strings.`,
+      linkedin: `Hi {name}, I follow your posts on ${audience} workflows. I just shipped ${name} — ${essence}. Would you be open to a quick look? I'd value your perspective and can share full access.`,
+      telegram: `Hi {name}! Big fan of your community for ${audience}. I just launched ${name} (${essence}). Would it be okay to share it with the group, or get your take first?`,
+    },
+    ugcAsk: `Hey! Thanks for being an early ${name} user. If it's saved you time, would you be up for a short post or 30-sec clip on how you use it? Happy to feature you and send some perks — real stories from ${audience} help far more than any ad.`,
+    postingTips: {
+      bestTimeET: '9:00–11:00 AM ET, Tuesday–Thursday',
+      hashtags: tags,
+    },
+  }
+}
+
 export class MockProvider implements GenerationProvider {
   async generateCore(input: GenerateInput): Promise<LaunchCore> {
     return buildCore(input)
@@ -195,6 +222,8 @@ export class MockProvider implements GenerationProvider {
         return buildReddit(core)
       case 'appsumo':
         return buildAppSumo(core)
+      case 'social':
+        return buildSocial(core)
     }
   }
 }

@@ -93,12 +93,21 @@ export type AppSumoContent = {
   faq: { q: string; a: string }[]
 }
 
+// Social / KOL: a launch thread for X plus influencer cold-outreach and a UGC ask.
+export type SocialContent = {
+  thread: { tweets: string[] }
+  kolOutreach: { twitter: string; linkedin: string; telegram: string }
+  ugcAsk: string
+  postingTips: { bestTimeET: string; hashtags: string[] }
+}
+
 // Maps each platform id to its own native content shape.
 export type PlatformContentMap = {
   'product-hunt': ProductHuntContent
   appsumo: AppSumoContent
   'hacker-news': HackerNewsContent
   reddit: RedditContent
+  social: SocialContent
 }
 
 export type PlatformContent = PlatformContentMap[keyof PlatformContentMap]

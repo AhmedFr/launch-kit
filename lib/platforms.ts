@@ -1,6 +1,6 @@
 // Launch platforms the kit can target. Each gets its own native, audience-tuned
 // content; adding one is a new entry here plus its generator + preview + sections.
-export type PlatformId = 'product-hunt' | 'appsumo' | 'hacker-news' | 'reddit'
+export type PlatformId = 'product-hunt' | 'appsumo' | 'hacker-news' | 'reddit' | 'social'
 
 export type Platform = {
   id: PlatformId
@@ -13,4 +13,5 @@ export const PLATFORMS: Platform[] = [
   { id: 'appsumo', name: 'AppSumo', blurb: 'Lifetime-deal marketplace' },
   { id: 'hacker-news', name: 'Hacker News', blurb: 'Show HN' },
   { id: 'reddit', name: 'Reddit', blurb: 'Subreddit launch post' },
+  { id: 'social', name: 'Social / KOL', blurb: 'X thread + influencer outreach' },
 ]

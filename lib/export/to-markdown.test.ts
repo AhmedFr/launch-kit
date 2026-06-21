@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { platformToMarkdown } from './to-markdown'
-import type { LaunchCore, ProductHuntContent, HackerNewsContent, RedditContent, AppSumoContent } from '@/lib/types'
+import type { LaunchCore, ProductHuntContent, HackerNewsContent, RedditContent, AppSumoContent, SocialContent } from '@/lib/types'
 
 const core: LaunchCore = {
   productName: 'Acme', essence: 'Ship faster', audience: 'developers', problem: 'Shipping is slow', features: ['Fast builds'], differentiators: ['Zero config'],
@@ -44,6 +44,13 @@ const appSumo: AppSumoContent = {
   faq: [{ q: 'Lifetime?', a: 'Yes.' }],
 }
 
+const social: SocialContent = {
+  thread: { tweets: ['Devs: shipping is slow.', 'I built Acme.'] },
+  kolOutreach: { twitter: 'Hey {name}', linkedin: 'Hi {name}', telegram: 'Hi {name}!' },
+  ugcAsk: 'Share how you use Acme?',
+  postingTips: { bestTimeET: '9 AM ET', hashtags: ['#buildinpublic'] },
+}
+
 describe('platformToMarkdown', () => {
   it('renders Product Hunt content with gallery and video', () => {
     const md = platformToMarkdown('product-hunt', core, ph)
@@ -77,5 +84,13 @@ describe('platformToMarkdown', () => {
     const md = platformToMarkdown('appsumo', core, appSumo)
     expect(md).toContain('Lifetime access to Acme')
     expect(md).toContain('Pay once, own forever.')
+  })
+
+  it('renders Social content with thread, outreach, and UGC ask', () => {
+    const md = platformToMarkdown('social', core, social)
+    expect(md).toContain('## X Launch Thread')
+    expect(md).toContain('## KOL Outreach')
+    expect(md).toContain('## UGC Ask')
+    expect(md).toContain('#buildinpublic')
   })
 })

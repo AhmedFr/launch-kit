@@ -10,6 +10,8 @@ import { redditSchema } from './reddit/schema'
 import { buildRedditPrompt, REDDIT_SYSTEM } from './reddit/prompt'
 import { appSumoSchema } from './appsumo/schema'
 import { buildAppSumoPrompt, APPSUMO_SYSTEM } from './appsumo/prompt'
+import { socialSchema } from './social/schema'
+import { buildSocialPrompt, SOCIAL_SYSTEM } from './social/prompt'
 
 // Everything needed to generate and validate one platform's content. Adding a
 // platform is a single entry here plus its schema.ts + prompt.ts.
@@ -24,4 +26,5 @@ export const PLATFORM_GENERATORS: Record<PlatformId, PlatformGenerator> = {
   appsumo: { schema: appSumoSchema, system: APPSUMO_SYSTEM, buildPrompt: buildAppSumoPrompt },
   'hacker-news': { schema: hackerNewsSchema, system: HACKER_NEWS_SYSTEM, buildPrompt: buildHackerNewsPrompt },
   reddit: { schema: redditSchema, system: REDDIT_SYSTEM, buildPrompt: buildRedditPrompt },
+  social: { schema: socialSchema, system: SOCIAL_SYSTEM, buildPrompt: buildSocialPrompt },
 }

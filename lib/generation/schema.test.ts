@@ -4,6 +4,7 @@ import { productHuntSchema } from './platforms/product-hunt/schema'
 import { hackerNewsSchema } from './platforms/hacker-news/schema'
 import { redditSchema } from './platforms/reddit/schema'
 import { appSumoSchema } from './platforms/appsumo/schema'
+import { socialSchema } from './platforms/social/schema'
 
 const core = {
   productName: 'Acme',
@@ -46,6 +47,13 @@ const appSumo = {
   whatsIncluded: ['All core features', 'Lifetime updates'],
   bestFor: ['Indie developers'],
   faq: [{ q: 'Is it really lifetime?', a: 'Yes.' }],
+}
+
+const social = {
+  thread: { tweets: ['Devs: shipping is slow. I built Acme. 🧵', 'It does X, Y, Z.', 'Live today — try it.'] },
+  kolOutreach: { twitter: 'Hey {name}...', linkedin: 'Hi {name}...', telegram: 'Hi {name}!' },
+  ugcAsk: 'Would you share how you use Acme?',
+  postingTips: { bestTimeET: '9:00 AM ET', hashtags: ['#buildinpublic'] },
 }
 
 describe('launchCoreSchema', () => {
@@ -95,5 +103,17 @@ describe('appSumoSchema', () => {
   })
   it('rejects content with a malformed faq entry', () => {
     expect(() => appSumoSchema.parse({ ...appSumo, faq: [{ q: 'no answer' }] })).toThrow()
+  })
+})
+
+describe('socialSchema', () => {
+  it('accepts valid Social content', () => {
+    expect(socialSchema.parse(social)).toEqual(social)
+  })
+  it('rejects content missing the thread', () => {
+    expect(() => socialSchema.parse({ ...social, thread: undefined })).toThrow()
+  })
+  it('rejects outreach missing a channel', () => {
+    expect(() => socialSchema.parse({ ...social, kolOutreach: { twitter: 'a', linkedin: 'b' } })).toThrow()
   })
 })

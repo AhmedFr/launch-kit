@@ -5,6 +5,7 @@ import { ProductHuntPreview } from '@/components/preview/ProductHuntPreview'
 import { AppSumoPreview } from '@/components/preview/AppSumoPreview'
 import { HackerNewsPreview } from '@/components/preview/HackerNewsPreview'
 import { RedditPreview } from '@/components/preview/RedditPreview'
+import { SocialPreview } from '@/components/preview/SocialPreview'
 
 // Maps a platform to its preview renderer. Each platform's preview lives in its
 // own component folder; adding one here is the only integration step.
@@ -13,6 +14,7 @@ export const PREVIEWS: Partial<Record<PlatformId, ComponentType<PreviewProps>>> 
   appsumo: AppSumoPreview,
   'hacker-news': HackerNewsPreview,
   reddit: RedditPreview,
+  social: SocialPreview,
 }
 
 export function hasPreview(id: PlatformId): boolean {
