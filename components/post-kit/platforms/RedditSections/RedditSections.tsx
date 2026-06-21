@@ -1,9 +1,10 @@
 import { SectionCard } from '@/components/common/SectionCard'
 import { CopyButton } from '@/components/common/CopyButton'
+import { EditableText } from '@/components/common/EditableText'
 import type { RedditContent } from '@/lib/types'
 import type { PlatformSectionsProps } from '../platform-sections.types'
 
-export function RedditSections({ content, loading = false }: PlatformSectionsProps) {
+export function RedditSections({ content, loading = false, onEdit }: PlatformSectionsProps) {
   const reddit = content as RedditContent
   return (
     <div className="space-y-4">
@@ -33,14 +34,24 @@ export function RedditSections({ content, loading = false }: PlatformSectionsPro
             <span className="text-xs uppercase text-muted-foreground">Title</span>
             <CopyButton value={reddit.title} />
           </div>
-          <p className="font-medium">{reddit.title}</p>
+          <EditableText
+            value={reddit.title}
+            onCommit={onEdit && ((v) => onEdit(['title'], v))}
+            ariaLabel="Reddit post title"
+            className="font-medium"
+          />
         </div>
         <div className="space-y-1">
           <div className="flex items-center justify-between">
             <span className="text-xs uppercase text-muted-foreground">Body</span>
             <CopyButton value={reddit.body} />
           </div>
-          <p className="whitespace-pre-wrap">{reddit.body}</p>
+          <EditableText
+            value={reddit.body}
+            onCommit={onEdit && ((v) => onEdit(['body'], v))}
+            multiline
+            ariaLabel="Reddit post body"
+          />
         </div>
       </SectionCard>
 

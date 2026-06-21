@@ -39,6 +39,7 @@ function renderKit() {
         onExportMarkdown={vi.fn()}
         onCopyPlan={vi.fn()}
         onExportPlan={vi.fn()}
+        onEditField={vi.fn()}
         onStartOver={vi.fn()}
       />
     </RuntimeConfigProvider>,

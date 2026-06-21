@@ -15,7 +15,7 @@ import type { PostKitProps } from './PostKit.types'
 type View = 'edit' | 'launch-ops' | 'preview'
 const VIEW_LABELS: Record<View, string> = { edit: 'Edit', 'launch-ops': 'Launch ops', preview: 'Preview' }
 
-export function PostKit({ generation, productName, onExportMarkdown, onCopyPlan, onExportPlan, onStartOver }: PostKitProps) {
+export function PostKit({ generation, productName, onExportMarkdown, onCopyPlan, onExportPlan, onEditField, onStartOver }: PostKitProps) {
   const { core, platforms, plan } = generation
   const firstReady = PLATFORMS.find((p) => platforms[p.id])?.id ?? 'product-hunt'
   const [platform, setPlatform] = useState<PlatformId>(firstReady)
@@ -117,7 +117,9 @@ export function PostKit({ generation, productName, onExportMarkdown, onCopyPlan,
             This platform didn&apos;t generate. Pick another, or start over to try again.
           </p>
         ) : activeView === 'edit' ? (
-          Sections ? <Sections core={core} content={content} /> : null
+          Sections ? (
+            <Sections core={core} content={content} onEdit={(path, value) => onEditField(platform, path, value)} />
+          ) : null
         ) : activeView === 'launch-ops' ? (
           <LaunchOpsSection kit={content as ProductHuntContent} />
         ) : Preview ? (

@@ -105,6 +105,10 @@ function RunWizard({ id }: { id: string }) {
     toast.success('Launch plan copied')
   }
 
+  function editField(platform: PlatformId, path: (string | number)[], value: string) {
+    dispatch({ type: 'EDIT_FIELD', platform, path, value })
+  }
+
   if (status === 'loading') {
     return <p className="px-6 py-16 text-center text-sm text-muted-foreground">Loading run…</p>
   }
@@ -161,6 +165,7 @@ function RunWizard({ id }: { id: string }) {
           onExportMarkdown={exportMarkdown}
           onCopyPlan={copyPlan}
           onExportPlan={exportPlan}
+          onEditField={editField}
           onStartOver={() => router.push('/runs')}
         />
       )}

@@ -7,5 +7,6 @@ export type PostKitProps = {
   onExportMarkdown: (platform: PlatformId) => void
   onCopyPlan: () => void
   onExportPlan: () => void
+  onEditField: (platform: PlatformId, path: (string | number)[], value: string) => void
   onStartOver: () => void
 }

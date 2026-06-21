@@ -1,9 +1,10 @@
 import { SectionCard } from '@/components/common/SectionCard'
 import { CopyButton } from '@/components/common/CopyButton'
+import { EditableText } from '@/components/common/EditableText'
 import type { SocialContent } from '@/lib/types'
 import type { PlatformSectionsProps } from '../platform-sections.types'
 
-export function SocialSections({ content, loading = false }: PlatformSectionsProps) {
+export function SocialSections({ content, loading = false, onEdit }: PlatformSectionsProps) {
   const social = content as SocialContent
   const fullThread = social.thread.tweets.join('\n\n')
   const channels: { label: string; value: string }[] = [
@@ -21,12 +22,17 @@ export function SocialSections({ content, loading = false }: PlatformSectionsPro
         </div>
         <ol className="space-y-2">
           {social.thread.tweets.map((tweet, i) => (
-            <li key={tweet} className="rounded-xl border border-border px-3 py-2">
+            <li key={i} className="rounded-xl border border-border px-3 py-2">
               <div className="mb-1 flex items-center justify-between">
                 <span className="text-xs text-muted-foreground">{i + 1}/{social.thread.tweets.length}</span>
                 <CopyButton value={tweet} />
               </div>
-              <p className="whitespace-pre-wrap">{tweet}</p>
+              <EditableText
+                value={tweet}
+                onCommit={onEdit && ((v) => onEdit(['thread', 'tweets', i], v))}
+                multiline
+                ariaLabel={`Tweet ${i + 1}`}
+              />
             </li>
           ))}
         </ol>
