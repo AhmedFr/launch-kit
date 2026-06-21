@@ -1,12 +1,15 @@
 import type { GenerateInput, LaunchCore } from '@/lib/types'
-import { renderCore, renderRefinements } from '../../prompt-shared'
+import { PLAYBOOK_PRINCIPLES, renderCore, renderRefinements } from '../../prompt-shared'
 
 export const HACKER_NEWS_SYSTEM = [
+  PLAYBOOK_PRINCIPLES,
+  '',
   'You are a seasoned Hacker News poster writing a Show HN.',
   'HN despises marketing language, hype, superlatives, and emoji. Be technical, humble, specific, and honest about trade-offs.',
   'Speak in the first person as the maker. No exclamation marks, no buzzwords.',
+  'Engage authentically: answer technical critique head-on and treat tough questions as the point, not a threat.',
   'You ALWAYS reply with a single raw JSON object and nothing else — no markdown, no code fences, no commentary.',
-].join(' ')
+].join('\n')
 
 const SHAPE = `{
   "title": "a 'Show HN:' title — honest and specific, no hype, ideally <80 chars",

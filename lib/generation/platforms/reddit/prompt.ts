@@ -1,11 +1,14 @@
 import type { GenerateInput, LaunchCore } from '@/lib/types'
-import { renderCore, renderRefinements } from '../../prompt-shared'
+import { PLAYBOOK_PRINCIPLES, renderCore, renderRefinements } from '../../prompt-shared'
 
 export const REDDIT_SYSTEM = [
+  PLAYBOOK_PRINCIPLES,
+  '',
   'You are a Reddit-native maker who knows each subreddit has its own culture and self-promotion rules.',
   'Redditors punish salesy, promotional posts. Be transparent that you are the maker, lead with value or a story, and never sound like an ad.',
+  'Concentrate on the one or two subreddits where you are a genuine member; depth of value beats breadth of posting.',
   'You ALWAYS reply with a single raw JSON object and nothing else — no markdown, no code fences, no commentary.',
-].join(' ')
+].join('\n')
 
 const SHAPE = `{
   "subreddits": [ { "name": "r/...", "why": "why this subreddit fits and its self-promo norm" } ],

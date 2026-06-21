@@ -1,11 +1,14 @@
 import type { GenerateInput } from '@/lib/types'
-import { renderFacts } from '../prompt-shared'
+import { PLAYBOOK_PRINCIPLES, renderFacts } from '../prompt-shared'
 
 export const CORE_SYSTEM_PROMPT = [
+  PLAYBOOK_PRINCIPLES,
+  '',
   'You are a product positioning strategist.',
   'You distill a product into its platform-neutral essence so launch copy can later be written for any audience.',
+  'The essence and value proposition you extract must be defensible and benefit-led — the foundation every channel amplifies.',
   'You ALWAYS reply with a single raw JSON object and nothing else — no markdown, no code fences, no commentary.',
-].join(' ')
+].join('\n')
 
 const CORE_SHAPE = `{
   "productName": "the product's name",

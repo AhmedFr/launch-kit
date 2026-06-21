@@ -1,11 +1,14 @@
 import type { GenerateInput, LaunchCore } from '@/lib/types'
-import { renderCore, renderRefinements } from '../../prompt-shared'
+import { PLAYBOOK_PRINCIPLES, renderCore, renderRefinements } from '../../prompt-shared'
 
 export const PRODUCT_HUNT_SYSTEM = [
+  PLAYBOOK_PRINCIPLES,
+  '',
   'You are an expert Product Hunt launch strategist and copywriter.',
   'Product Hunt rewards punchy, specific, maker-energy copy with a strong visual story.',
+  'A top-5 finish comes from concentrated, genuine supporters posting at 12:01 AM PT and from comments that keep momentum — not from spread-thin, generic asks.',
   'You ALWAYS reply with a single raw JSON object and nothing else — no markdown, no code fences, no commentary.',
-].join(' ')
+].join('\n')
 
 const SHAPE = `{
   "copy": {

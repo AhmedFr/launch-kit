@@ -1,5 +1,16 @@
 import type { GenerateInput, LaunchCore } from '@/lib/types'
 
+// The Gingiris launch-playbook principles, prepended to every system prompt so all
+// generated copy is shaped by the same launch philosophy regardless of platform.
+export const PLAYBOOK_PRINCIPLES = [
+  'Launch principles to honor in everything you write:',
+  '1. User value first — every line must earn attention by promising real value to the target user, never by hyping the maker.',
+  '2. Content is king, channel is queen — the message must be strong enough to spread on its own; the platform only amplifies it.',
+  '3. Global brand, local execution — keep one clear, consistent positioning while speaking natively to this specific platform and audience.',
+  '4. Concentrate on real people, not vanity — favor a few high-intent, genuine asks over broad, hollow ones.',
+  'Anchor claims in concrete specifics; use credible numbers only when given, and never invent metrics or lean on empty superlatives.',
+].join('\n')
+
 // Raw product facts, used for the core distillation call.
 export function renderFacts(input: GenerateInput): string {
   const { context, refinements } = input
