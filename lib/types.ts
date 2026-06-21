@@ -31,6 +31,10 @@ export type LaunchCore = {
   problem: string
   features: string[]
   differentiators: string[]
+  // Enrichments (optional for back-compat with cores persisted before they existed).
+  keywords?: string[] // SEO/GEO + PH topics + subreddit targeting
+  icp?: string // sharper than free-text `audience` — the ideal customer profile
+  valueProp?: string // the one-sentence promise channels amplify
 }
 
 // Product Hunt is the richest format: gallery, demo video, maker comment, hunter outreach.

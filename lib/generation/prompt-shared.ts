@@ -31,16 +31,22 @@ export function renderFacts(input: GenerateInput): string {
     .join('\n')
 }
 
-// The distilled core, rendered for a platform-content call.
+// The distilled core, rendered for a platform-content call. The enrichment lines
+// are emitted only when present so cores persisted before they existed still render.
 export function renderCore(core: LaunchCore): string {
   return [
     `Product: ${core.productName}`,
     `Essence: ${core.essence}`,
+    core.valueProp && `Value proposition: ${core.valueProp}`,
     `Audience: ${core.audience}`,
+    core.icp && `Ideal customer profile: ${core.icp}`,
     `Problem solved: ${core.problem}`,
     `Features: ${core.features.join('; ')}`,
     `Differentiators: ${core.differentiators.join('; ')}`,
-  ].join('\n')
+    core.keywords?.length && `Keywords: ${core.keywords.join(', ')}`,
+  ]
+    .filter(Boolean)
+    .join('\n')
 }
 
 // Author-chosen refinements that shape voice; appended to every platform prompt.

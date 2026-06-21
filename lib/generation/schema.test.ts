@@ -12,6 +12,9 @@ const core = {
   problem: 'Shipping is slow.',
   features: ['Fast builds'],
   differentiators: ['Zero config'],
+  valueProp: 'Ship in minutes, not days.',
+  icp: 'Seed-stage dev teams shipping weekly',
+  keywords: ['ci', 'builds', 'developer tools'],
 }
 
 const productHunt = {
@@ -51,6 +54,11 @@ describe('launchCoreSchema', () => {
   })
   it('rejects a core missing essence', () => {
     expect(() => launchCoreSchema.parse({ ...core, essence: undefined })).toThrow()
+  })
+  it('accepts a core without the optional enrichment fields (back-compat)', () => {
+    const { valueProp, icp, keywords, ...legacy } = core
+    void valueProp; void icp; void keywords
+    expect(() => launchCoreSchema.parse(legacy)).not.toThrow()
   })
 })
 

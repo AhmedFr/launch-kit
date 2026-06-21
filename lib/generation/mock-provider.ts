@@ -16,13 +16,20 @@ function clamp(s: string, n: number): string {
 
 function buildCore({ context, refinements }: GenerateInput): LaunchCore {
   const audience = refinements.audience || context.audience || 'builders'
+  const essence = context.oneLiner || context.summary || `${context.name} gets the job done`
+  const keywords = Array.from(
+    new Set([...context.techStack, ...context.features.map((f) => f.toLowerCase())]),
+  ).slice(0, 8)
   return {
     productName: context.name,
-    essence: context.oneLiner || context.summary || `${context.name} gets the job done`,
+    essence,
     audience,
     problem: context.problem || `${audience} waste time on a slow, manual process`,
     features: context.features.length ? context.features : ['Does the core job well', 'Simple to start', 'Built for speed'],
     differentiators: context.differentiators.length ? context.differentiators : ['Faster than the manual way', 'No setup required'],
+    valueProp: essence,
+    icp: refinements.audience || context.audience || `${audience} who want results without the busywork`,
+    keywords: keywords.length ? keywords : [context.name.toLowerCase(), 'productivity', 'tool'],
   }
 }
 

@@ -16,7 +16,10 @@ const CORE_SHAPE = `{
   "audience": "who it is for",
   "problem": "the concrete problem it solves",
   "features": ["3-6 concrete capabilities"],
-  "differentiators": ["2-4 reasons it is different or better"]
+  "differentiators": ["2-4 reasons it is different or better"],
+  "valueProp": "the single-sentence promise to the user that every channel will amplify",
+  "icp": "the ideal customer profile — sharper and more specific than the broad audience",
+  "keywords": ["5-8 search/topic keywords for SEO, Product Hunt topics and community targeting"]
 }`
 
 export function buildCorePrompt(input: GenerateInput): string {
