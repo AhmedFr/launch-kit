@@ -36,10 +36,7 @@ function renderKit() {
       <PostKit
         generation={generation}
         productName="Acme"
-        onRegeneratePlatform={vi.fn()}
-        regeneratingPlatform={null}
         onExportMarkdown={vi.fn()}
-        onCopyAll={vi.fn()}
         onCopyPlan={vi.fn()}
         onExportPlan={vi.fn()}
         onStartOver={vi.fn()}

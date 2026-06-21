@@ -27,7 +27,6 @@ function RunWizard({ id }: { id: string }) {
   const router = useRouter()
   const { state, dispatch, status } = useRun(id)
   const [generating, setGenerating] = useState(false)
-  const [regeneratingPlatform, setRegeneratingPlatform] = useState<PlatformId | null>(null)
 
   function handleAnalyzed(context: ProjectContext) {
     // One run per folder: if this path already belongs to another run, go there.
@@ -54,32 +53,12 @@ function RunWizard({ id }: { id: string }) {
       dispatch({ type: 'GENERATED', generation: data.generation })
       if (Array.isArray(data.failed) && data.failed.length) {
         const names = data.failed.map((f: PlatformId) => PLATFORMS.find((p) => p.id === f)?.name ?? f)
-        toast.warning(`Couldn't generate: ${names.join(', ')}. You can regenerate them.`)
+        toast.warning(`Couldn't generate: ${names.join(', ')}.`)
       }
     } catch (err) {
       toast.error(err instanceof Error ? err.message : 'Generation failed')
     } finally {
       setGenerating(false)
-    }
-  }
-
-  async function regeneratePlatform(platform: PlatformId) {
-    if (!state.context || !state.generation) return
-    const body = { context: state.context, refinements: state.refinements, platform, core: state.generation.core }
-    setRegeneratingPlatform(platform)
-    try {
-      const res = await fetch('/api/generate', {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify(body),
-      })
-      const data = await res.json()
-      if (!res.ok) throw new Error(data.error ?? 'Generation failed')
-      dispatch({ type: 'REGEN_PLATFORM', platform, content: data.content })
-    } catch (err) {
-      toast.error(err instanceof Error ? err.message : 'Generation failed')
-    } finally {
-      setRegeneratingPlatform(null)
     }
   }
 
@@ -100,14 +79,6 @@ function RunWizard({ id }: { id: string }) {
     a.download = `${platform}-launch-kit.md`
     a.click()
     URL.revokeObjectURL(url)
-  }
-
-  async function copyAll(platform: PlatformId) {
-    const md = markdownFor(platform)
-    if (!md) return
-    await navigator.clipboard.writeText(md)
-    const name = PLATFORMS.find((p) => p.id === platform)?.name ?? platform
-    toast.success(`${name} kit copied`)
   }
 
   function planMarkdown(): string | null {
@@ -187,10 +158,7 @@ function RunWizard({ id }: { id: string }) {
         <PostKit
           generation={state.generation}
           productName={state.context?.name ?? state.generation.core.productName ?? 'Your product'}
-          onRegeneratePlatform={regeneratePlatform}
-          regeneratingPlatform={regeneratingPlatform}
           onExportMarkdown={exportMarkdown}
-          onCopyAll={copyAll}
           onCopyPlan={copyPlan}
           onExportPlan={exportPlan}
           onStartOver={() => router.push('/runs')}
