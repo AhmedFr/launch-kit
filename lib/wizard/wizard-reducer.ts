@@ -1,5 +1,6 @@
 import type { ProjectContext, Refinements, Generation, PlatformContent } from '@/lib/types'
 import type { PlatformId } from '@/lib/platforms'
+import { setIn } from './set-in'
 
 export type WizardStep = 'folder' | 'review' | 'kit'
 
@@ -18,6 +19,7 @@ export type WizardAction =
   | { type: 'EDIT_REFINEMENTS'; refinements: Refinements }
   | { type: 'GENERATED'; generation: Generation }
   | { type: 'REGEN_PLATFORM'; platform: PlatformId; content: PlatformContent }
+  | { type: 'EDIT_FIELD'; platform: PlatformId; path: (string | number)[]; value: string }
   | { type: 'GO'; step: WizardStep }
   | { type: 'HYDRATE'; state: WizardState }
   | { type: 'RESET' }
@@ -40,6 +42,17 @@ export function wizardReducer(state: WizardState, action: WizardAction): WizardS
             generation: {
               ...state.generation,
               platforms: { ...state.generation.platforms, [action.platform]: action.content },
+            },
+          }
+        : state
+    case 'EDIT_FIELD':
+      // Inline edit: deep-set a single field inside the active platform's content.
+      return state.generation
+        ? {
+            ...state,
+            generation: {
+              ...state.generation,
+              platforms: setIn(state.generation.platforms, [action.platform, ...action.path], action.value),
             },
           }
         : state

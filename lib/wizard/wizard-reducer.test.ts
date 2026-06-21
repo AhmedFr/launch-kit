@@ -61,4 +61,27 @@ describe('wizardReducer', () => {
     expect(re.generation).toBeNull()
     expect(re.step).toBe('review')
   })
+
+  it('EDIT_FIELD deep-sets a nested prose field immutably', () => {
+    const editable = {
+      core: gen.core,
+      platforms: { 'product-hunt': { copy: { tagline: 'old' } }, social: { thread: { tweets: ['a', 'b'] } } },
+    } as unknown as Generation
+    const atKit = { ...initialState, step: 'kit' as const, context: ctx, generation: editable }
+    const s = wizardReducer(atKit, { type: 'EDIT_FIELD', platform: 'product-hunt', path: ['copy', 'tagline'], value: 'new' })
+    expect((s.generation!.platforms['product-hunt'] as { copy: { tagline: string } }).copy.tagline).toBe('new')
+    expect((editable.platforms['product-hunt'] as { copy: { tagline: string } }).copy.tagline).toBe('old')
+  })
+
+  it('EDIT_FIELD edits a social tweet by array index', () => {
+    const editable = { core: gen.core, platforms: { social: { thread: { tweets: ['a', 'b'] } } } } as unknown as Generation
+    const atKit = { ...initialState, step: 'kit' as const, context: ctx, generation: editable }
+    const s = wizardReducer(atKit, { type: 'EDIT_FIELD', platform: 'social', path: ['thread', 'tweets', 0], value: 'A' })
+    expect((s.generation!.platforms.social as { thread: { tweets: string[] } }).thread.tweets).toEqual(['A', 'b'])
+  })
+
+  it('EDIT_FIELD is a no-op when there is no generation', () => {
+    const s = wizardReducer(initialState, { type: 'EDIT_FIELD', platform: 'reddit', path: ['title'], value: 'x' })
+    expect(s.generation).toBeNull()
+  })
 })
