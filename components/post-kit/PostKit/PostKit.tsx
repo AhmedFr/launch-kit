@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { RegenerateButton } from '@/components/common/RegenerateButton'
+import { LaunchPlan } from '@/components/launch-plan/LaunchPlan'
 import { PLATFORMS, type PlatformId } from '@/lib/platforms'
 import { PREVIEWS } from '@/lib/preview/registry'
 import { PLATFORM_SECTIONS } from '@/components/post-kit/platforms/registry'
@@ -16,9 +17,11 @@ export function PostKit({
   regeneratingPlatform,
   onExportMarkdown,
   onCopyAll,
+  onCopyPlan,
+  onExportPlan,
   onStartOver,
 }: PostKitProps) {
-  const { core, platforms } = generation
+  const { core, platforms, plan } = generation
   const firstReady = PLATFORMS.find((p) => platforms[p.id])?.id ?? 'product-hunt'
   const [platform, setPlatform] = useState<PlatformId>(firstReady)
   const [view, setView] = useState<'edit' | 'preview'>('edit')
@@ -38,6 +41,13 @@ export function PostKit({
           {core.essence}
         </h2>
       </div>
+
+      {/* Cross-platform launch plan — spans every channel, shown above the per-platform kits */}
+      {plan && (
+        <div className="reveal reveal-1 mb-6">
+          <LaunchPlan plan={plan} onCopy={onCopyPlan} onExport={onExportPlan} />
+        </div>
+      )}
 
       {/* Platform selector — drives both edit and preview */}
       <div className="reveal reveal-2 mb-4 flex flex-wrap justify-center gap-2">

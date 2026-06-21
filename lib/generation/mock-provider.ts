@@ -3,6 +3,7 @@ import type {
   GenerateInput,
   HackerNewsContent,
   LaunchCore,
+  LaunchPlan,
   PlatformContent,
   ProductHuntContent,
   RedditContent,
@@ -206,6 +207,53 @@ function buildSocial(core: LaunchCore): SocialContent {
   }
 }
 
+function buildPlan(core: LaunchCore): LaunchPlan {
+  const { productName: name, audience, keywords } = core
+  const kw = (keywords?.length ? keywords : [name.toLowerCase()]).slice(0, 3).join(', ')
+  return {
+    phases: [
+      { window: 'L-6 weeks', goal: 'Lock strategy', tasks: [`Define the ICP and value prop for ${audience}`, `Pick target keywords (${kw}) and a launch goal`, 'Set the budget for the few high-value channels'] },
+      { window: 'L-5 to L-4 weeks', goal: 'Build assets', tasks: ['Polish the landing page and demo video', `Write the core story for ${name}`, 'Prepare gallery shots and the feature clip'] },
+      { window: 'L-4 to L-3 weeks', goal: 'Lock partnerships', tasks: ['Shortlist and reach out to relevant KOLs', 'Recruit a handful of early UGC creators', 'Line up a credible Product Hunt hunter'] },
+      { window: 'L-3 to L-2 weeks', goal: 'Prepare content', tasks: ['Draft the PH, HN, Reddit and X copy', 'Brief KOLs with a content pack', 'Map which subreddits and communities to seed'] },
+      { window: 'L-2 to L-1 weeks', goal: 'Final confirmation', tasks: ['Confirm all drafts and the hunter', 'Lock the launch date and time', 'Warm up your network'] },
+      { window: 'Launch week (Day 1-5)', goal: 'Execute', tasks: ['Run the Product Hunt day plan', 'Publish the X thread and trigger KOL posts', 'Seed Reddit/HN where you are a real member'] },
+      { window: 'L+1 to L+4 weeks', goal: 'Build momentum', tasks: ['Convert early users into UGC', 'Capture backlinks and press', 'Publish follow-up content on traction'] },
+    ],
+    countdown30: [
+      'Finalize positioning and the launch goal',
+      'Build the landing page and demo video',
+      'Start KOL and hunter outreach',
+      `Set up analytics and configure IndexNow for ${kw}`,
+    ],
+    countdown7: [
+      'Confirm hunter and KOL commitments',
+      'Schedule the launch-day comms',
+      'Pre-write first comments and the X thread',
+      'Warm up your network with a teaser',
+    ],
+    countdown48h: [
+      'Final QA of the product and signup flow',
+      'Pin assets and double-check links',
+      'Brief supporters on timing (12:01 AM PT)',
+      'Rest — launch day is long',
+    ],
+    seoGeo: [
+      `Publish a launch blog post targeting "${kw}"`,
+      'Configure IndexNow so new pages hit Bing/AI search in seconds',
+      'Add Product/SoftwareApplication schema markup to the site',
+      'Capture backlinks from the launch (PH, directories, press)',
+      'Structure pages with clear Q&A so AI search engines cite you',
+    ],
+    momentum: [
+      'Day 1-7: thank everyone, reply to all feedback, ship a quick win',
+      'Day 7: post a "what we learned" recap with metrics',
+      'Day 14: publish UGC and case studies from early users',
+      'Day 30: roundup post and outreach to newsletters/press',
+    ],
+  }
+}
+
 export class MockProvider implements GenerationProvider {
   async generateCore(input: GenerateInput): Promise<LaunchCore> {
     return buildCore(input)
@@ -225,5 +273,10 @@ export class MockProvider implements GenerationProvider {
       case 'social':
         return buildSocial(core)
     }
+  }
+
+  async generatePlan(core: LaunchCore, _input?: GenerateInput): Promise<LaunchPlan> {
+    void _input
+    return buildPlan(core)
   }
 }

@@ -8,5 +8,7 @@ export type PostKitProps = {
   regeneratingPlatform: PlatformId | null
   onExportMarkdown: (platform: PlatformId) => void
   onCopyAll: (platform: PlatformId) => void
+  onCopyPlan: () => void
+  onExportPlan: () => void
   onStartOver: () => void
 }

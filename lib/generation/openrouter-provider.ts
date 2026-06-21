@@ -1,9 +1,11 @@
 import type { z } from 'zod'
-import type { GenerateInput, LaunchCore, PlatformContent } from '@/lib/types'
+import type { GenerateInput, LaunchCore, LaunchPlan, PlatformContent } from '@/lib/types'
 import type { PlatformId } from '@/lib/platforms'
 import type { GenerationProvider } from './provider.types'
 import { launchCoreSchema } from './core/core.schema'
 import { buildCorePrompt, CORE_SYSTEM_PROMPT } from './core/core.prompt'
+import { launchPlanSchema } from './plan/plan.schema'
+import { buildPlanPrompt, PLAN_SYSTEM } from './plan/plan.prompt'
 import { PLATFORM_GENERATORS } from './platforms/registry'
 import { extractJsonObject } from './json'
 import { DEFAULT_MODEL } from './model'
@@ -24,6 +26,10 @@ export class OpenRouterProvider implements GenerationProvider {
   async generatePlatform(platform: PlatformId, core: LaunchCore, input: GenerateInput): Promise<PlatformContent> {
     const gen = PLATFORM_GENERATORS[platform]
     return this.call(gen.system, gen.buildPrompt(core, input), gen.schema)
+  }
+
+  async generatePlan(core: LaunchCore, input: GenerateInput): Promise<LaunchPlan> {
+    return this.call(PLAN_SYSTEM, buildPlanPrompt(core, input), launchPlanSchema)
   }
 
   private async call<T>(system: string, user: string, schema: z.ZodType<T>): Promise<T> {

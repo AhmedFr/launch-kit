@@ -9,6 +9,7 @@ import { ContextReview } from '@/components/context-review/ContextReview'
 import { PostKit } from '@/components/post-kit/PostKit'
 import { GeneratingKit } from '@/components/generating/GeneratingKit'
 import { platformToMarkdown } from '@/lib/export/to-markdown'
+import { planToMarkdown } from '@/lib/export/plan-to-markdown'
 import { PLATFORMS, type PlatformId } from '@/lib/platforms'
 import { useRun } from '@/lib/runs/useRun'
 import { findByPath } from '@/lib/runs/store'
@@ -109,6 +110,30 @@ function RunWizard({ id }: { id: string }) {
     toast.success(`${name} kit copied`)
   }
 
+  function planMarkdown(): string | null {
+    if (!state.generation?.plan) return null
+    return planToMarkdown(state.generation.core, state.generation.plan)
+  }
+
+  function exportPlan() {
+    const md = planMarkdown()
+    if (!md) return
+    const blob = new Blob([md], { type: 'text/markdown' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = 'launch-plan.md'
+    a.click()
+    URL.revokeObjectURL(url)
+  }
+
+  async function copyPlan() {
+    const md = planMarkdown()
+    if (!md) return
+    await navigator.clipboard.writeText(md)
+    toast.success('Launch plan copied')
+  }
+
   if (status === 'loading') {
     return <p className="px-6 py-16 text-center text-sm text-muted-foreground">Loading run…</p>
   }
@@ -166,6 +191,8 @@ function RunWizard({ id }: { id: string }) {
           regeneratingPlatform={regeneratingPlatform}
           onExportMarkdown={exportMarkdown}
           onCopyAll={copyAll}
+          onCopyPlan={copyPlan}
+          onExportPlan={exportPlan}
           onStartOver={() => router.push('/runs')}
         />
       )}

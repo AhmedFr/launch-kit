@@ -112,10 +112,22 @@ export type PlatformContentMap = {
 
 export type PlatformContent = PlatformContentMap[keyof PlatformContentMap]
 
-// The full generation result: a shared core plus whichever platforms succeeded.
+// A cross-platform, product-tailored launch plan: timeline, countdowns, SEO/GEO, momentum.
+export type LaunchPlan = {
+  phases: { window: string; goal: string; tasks: string[] }[]
+  countdown30: string[]
+  countdown7: string[]
+  countdown48h: string[]
+  seoGeo: string[]
+  momentum: string[]
+}
+
+// The full generation result: a shared core, whichever platforms succeeded, and an
+// optional cross-platform launch plan (optional for back-compat with persisted runs).
 export type Generation = {
   core: LaunchCore
   platforms: Partial<PlatformContentMap>
+  plan?: LaunchPlan
 }
 
 export type GenerateInput = { context: ProjectContext; refinements: Refinements }
