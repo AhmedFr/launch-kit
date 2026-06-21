@@ -3,12 +3,18 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { RegenerateButton } from '@/components/common/RegenerateButton'
 import { LaunchPlan } from '@/components/launch-plan/LaunchPlan'
+import { LaunchOpsSection } from '@/components/post-kit/sections/LaunchOpsSection'
 import { PLATFORMS, type PlatformId } from '@/lib/platforms'
 import { PREVIEWS } from '@/lib/preview/registry'
 import { PLATFORM_SECTIONS } from '@/components/post-kit/platforms/registry'
 import { useRuntimeConfig } from '@/lib/config/RuntimeConfigProvider'
 import { canGenerate } from '@/lib/config/runtime-config'
+import type { ProductHuntContent } from '@/lib/types'
 import type { PostKitProps } from './PostKit.types'
+
+// Product Hunt is the only platform with a launch-day ops view; it gets a third tab.
+type View = 'edit' | 'launch-ops' | 'preview'
+const VIEW_LABELS: Record<View, string> = { edit: 'Edit', 'launch-ops': 'Launch ops', preview: 'Preview' }
 
 export function PostKit({
   generation,
@@ -24,7 +30,7 @@ export function PostKit({
   const { core, platforms, plan } = generation
   const firstReady = PLATFORMS.find((p) => platforms[p.id])?.id ?? 'product-hunt'
   const [platform, setPlatform] = useState<PlatformId>(firstReady)
-  const [view, setView] = useState<'edit' | 'preview'>('edit')
+  const [view, setView] = useState<View>('edit')
 
   const content = platforms[platform]
   const Sections = PLATFORM_SECTIONS[platform]
@@ -32,6 +38,11 @@ export function PostKit({
   const regenerating = regeneratingPlatform === platform
   const config = useRuntimeConfig()
   const canRegenerate = canGenerate(config)
+
+  // Only Product Hunt has launch-day ops; fall back to Edit when its tab can't apply.
+  const hasLaunchOps = platform === 'product-hunt' && Boolean(content)
+  const views: View[] = hasLaunchOps ? ['edit', 'launch-ops', 'preview'] : ['edit', 'preview']
+  const activeView: View = view === 'launch-ops' && !hasLaunchOps ? 'edit' : view
 
   return (
     <div className="mx-auto max-w-5xl px-6">
@@ -74,18 +85,18 @@ export function PostKit({
         })}
       </div>
 
-      {/* Toolbar: Edit | Preview + per-platform actions */}
+      {/* Toolbar: Edit | Launch ops (PH only) | Preview + per-platform actions */}
       <div className="reveal reveal-2 mb-5 flex flex-wrap items-center justify-between gap-3">
         <div className="inline-flex rounded-lg border border-border bg-card p-0.5 shadow-sm">
-          {(['edit', 'preview'] as const).map((v) => (
+          {views.map((v) => (
             <button
               key={v}
               onClick={() => setView(v)}
-              className={`rounded-md px-3 py-1.5 text-sm capitalize transition-colors ${
-                view === v ? 'bg-primary text-primary-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'
+              className={`whitespace-nowrap rounded-md px-3 py-1.5 text-sm transition-colors ${
+                activeView === v ? 'bg-primary text-primary-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'
               }`}
             >
-              {v}
+              {VIEW_LABELS[v]}
             </button>
           ))}
         </div>
@@ -102,13 +113,15 @@ export function PostKit({
         </div>
       </div>
 
-      <div key={`${platform}-${view}`} className="reveal reveal-2">
+      <div key={`${platform}-${activeView}`} className="reveal reveal-2">
         {!content ? (
           <p className="text-center text-sm text-muted-foreground">
             This platform didn&apos;t generate. Switch to a ready platform, or start over to try again.
           </p>
-        ) : view === 'edit' ? (
+        ) : activeView === 'edit' ? (
           Sections ? <Sections core={core} content={content} loading={regenerating} /> : null
+        ) : activeView === 'launch-ops' ? (
+          <LaunchOpsSection kit={content as ProductHuntContent} loading={regenerating} />
         ) : Preview ? (
           <Preview core={core} content={content} productName={productName} />
         ) : (
