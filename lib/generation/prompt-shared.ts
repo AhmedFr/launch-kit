@@ -9,6 +9,7 @@ export const PLAYBOOK_PRINCIPLES = [
   '3. Global brand, local execution — keep one clear, consistent positioning while speaking natively to this specific platform and audience.',
   '4. Concentrate on real people, not vanity — favor a few high-intent, genuine asks over broad, hollow ones.',
   'Anchor claims in concrete specifics; use credible numbers only when given, and never invent metrics or lean on empty superlatives.',
+  "Write like a person, not an AI. Never use an em dash (the \" — \" construction); restructure the sentence with a period, comma, colon, or parentheses instead.",
 ].join('\n')
 
 // Raw product facts, used for the core distillation call.
